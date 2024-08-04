@@ -1,7 +1,3 @@
-Here's a template for your GitHub README file for the "Animal Rescue Community" project:
-
----
-
 # Animal Rescue Community
 
 Welcome to the **Animal Rescue Community** project! This web application is designed to assist in the adoption of animals, manage donations, and track expenses. The goal is to provide a platform where people can help animals in need.
@@ -105,7 +101,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For questions or inquiries, please contact [ARC PUNE](https://github.com/ARCPUNE), [Sahil Kamble](https://github.com/thesahilkamble), [Akash Bharambe](https://github.com/Akash-Bharambe).
-
----
-
-Feel free to customize this README as needed to better fit your project's details and specifics. If you have any additional information or features to include, you can expand on the provided sections.
