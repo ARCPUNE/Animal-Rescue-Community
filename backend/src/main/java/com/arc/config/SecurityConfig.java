@@ -40,21 +40,22 @@ public class SecurityConfig {
 			
 			@Override
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				User user = userRepository.findByEmail(username).orElseThrow(()->new UserNotFoundException("User with username "+ username+" not found"));
-				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthorities());
+				User user = userRepository.findByEmail(username)
+						.orElseThrow(()->new UserNotFoundException("User with username "+ username+" not found"));
+				
+				return new org.springframework.security.core.userdetails
+						.User(user.getEmail(), user.getPassword(), user.getAuthorities());
 			}
 		};
 	}
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-    	//addNewUser(new UserDTO(null, "admin", "admin@gmail.com", "1111", "8411840325", Role.ROLE_Admin, null));
-    	//addNewUser(new UserDTO(null, "volunteer", "vadmin@gmail.com", "1111", "8411840325", Role.ROLE_Volunteer, null));
         httpSecurity.csrf(csrf -> csrf.disable())
         		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
         		.authorizeHttpRequests(requests -> requests
-//                        .requestMatchers("/swagger-ui/**").permitAll()
-//                        .requestMatchers("/users/*").hasRole("Admin")
+                        .requestMatchers("/users/**").hasRole("Admin")
+                        .requestMatchers("/adoptions/**").hasRole("Admin")
                         .anyRequest().permitAll())
                 .formLogin(form -> form
                         .permitAll()
@@ -69,7 +70,7 @@ public class SecurityConfig {
     @Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config =  new CorsConfiguration();
-		config.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+		config.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));
 		config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
 		config.setAllowedHeaders(Arrays.asList("*"));
 		config.setAllowCredentials(true);
@@ -77,23 +78,5 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", config);
 		return source;
 	}
-    
-//    @Autowired
-//	private ModelMapper mapper;
-//    
-//public UserDTO addNewUser(UserDTO userDTO) {
-//		
-//		// Check if user already exists with the email provided
-//		if (userRepository.existsByEmail(userDTO.getEmail())) {
-//			throw new UserAlreadyExistsException("User with email address " + userDTO.getEmail()+" already exists");
-//		}
-//		PasswordEncoder encoder = passwordEncoder();
-//		String pass = encoder.encode(userDTO.getPassword());
-//		userDTO.setPassword(pass);
-//		
-//		return mapper.map(
-//				userRepository.save(
-//						mapper.map(userDTO, User.class) // Map userDTO to user and save it in DB
-//						), UserDTO.class); // map the saved user entity to userDTO and return it
-//	}
+ 
 }
