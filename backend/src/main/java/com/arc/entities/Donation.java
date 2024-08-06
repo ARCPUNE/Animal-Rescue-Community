@@ -26,29 +26,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Donation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User userId;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal amount;
+	@Column(nullable = false, precision = 10, scale = 2)
+	private BigDecimal amount;
 
-    @Column(nullable = false)
-    private LocalDate date;
+	@Column(nullable = false)
+	private LocalDate date;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method", nullable = false)
-    private PaymentMethod paymentMethod;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_method", nullable = false)
+	private PaymentMethod paymentMethod;
 
-    @Lob
-    @Column(name = "donation_proof", nullable = false)
-    private byte[] donationProof;
+	@Lob
+//  @Column(name = "donation_proof", nullable = false)
+	@Column(name = "donation_proof")
+	private byte[] donationProof;
 
-    public enum PaymentMethod {
-        CASH, CARD, UPI
-    }
+	public enum PaymentMethod {
+		CASH, CARD, UPI
+	}
 }

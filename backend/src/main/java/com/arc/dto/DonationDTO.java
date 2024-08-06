@@ -1,7 +1,7 @@
 package com.arc.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.arc.entities.Donation.PaymentMethod;
 
@@ -28,7 +28,7 @@ public class DonationDTO {
 	private BigDecimal amount;
 
 	@NotNull(message = "Date must be provided")
-	private Date date;
+	private LocalDate date;
 
 	@NotNull(message = "Payment method must be provided")
 	private PaymentMethod paymentMethod;

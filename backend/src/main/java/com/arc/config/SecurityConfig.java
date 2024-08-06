@@ -53,9 +53,9 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable())
         		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
         		.authorizeHttpRequests(requests -> requests
-//                        .requestMatchers("/users").permitAll()
+//                        .requestMatchers("/swagger-ui/**").permitAll()
 //                        .requestMatchers("/users/*").hasRole("Admin")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .formLogin(form -> form
                         .permitAll()
                         .defaultSuccessUrl("/users"))
