@@ -13,9 +13,9 @@ public class BackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
-	
-	@Bean
-	public ModelMapper configureModelMapper() {
+
+    @Bean
+    ModelMapper configureModelMapper() {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT).setPropertyCondition(Conditions.isNotNull());
 		return mapper;

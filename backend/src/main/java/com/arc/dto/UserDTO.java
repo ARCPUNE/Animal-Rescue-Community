@@ -1,23 +1,28 @@
 package com.arc.dto;
 
-import com.arc.entities.Role;
+import com.arc.entities.User.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter @Setter @NoArgsConstructor @ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
+	
+	private Long id;
 
 	@NotBlank(message = "Name Cannot be Blank")
 	private String name;
 	
 	@NotBlank(message = "Email Cannot be Blank")
+	@Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",message = "Invalid Email Address")
 	private String email;
 	
 	@JsonProperty(access = Access.WRITE_ONLY)
