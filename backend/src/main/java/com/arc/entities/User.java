@@ -1,6 +1,5 @@
 package com.arc.entities;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -24,38 +23,38 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
-	
-	@Column(name = "name", length = 50,nullable = false)
+
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
-	
-	@Column(name = "email" ,unique = true, length = 50, nullable = false)
+
+	@Column(name = "email", unique = true, length = 50, nullable = false)
 	private String email;
-	
+
 	@Column(name = "password", length = 255, nullable = false)
 	private String password;
-	
+
 	@Column(name = "phone_no", length = 10)
 	private String phoneNo;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", length = 10, nullable = false)
 	private Role role;
-	
+
 	@Column(name = "address", length = 255)
 	private String address;
-	
+
 	public enum Role {
-		ROLE_Admin, ROLE_Volunteer;
+		ROLE_Admin, ROLE_Volunteer, ROLE_Guest;
 	}
-	
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Convert roles to a collection of GrantedAuthority
-        return List.of(new SimpleGrantedAuthority(role.toString()));
-    }
-	
+
+	public List<? extends GrantedAuthority> getAuthorities() {
+		// Convert roles to a collection of GrantedAuthority
+		return List.of(new SimpleGrantedAuthority(role.toString()));
+	}
+
 }

@@ -3,9 +3,9 @@ package com.arc.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,8 +26,17 @@ import com.arc.repository.UserRepository;
 @EnableWebSecurity(debug = true)
 public class SecurityConfig {
 	
+	@Value("${frontend.url}")
+	private String frontendURL;
+	
+	@Value("${backend.url}")
+	private String backendURL;
+	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private OAuth2SuccessHandler oAuth2SuccessHandler;
 	
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -54,7 +63,7 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable())
         		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
         		.authorizeHttpRequests(requests -> requests
-//                        .requestMatchers("/users/**").hasRole("Admin")
+                          .requestMatchers("/users/**").authenticated()//.hasRole("Admin")
 //                        .requestMatchers("/adoptions/**").hasRole("Admin")
                         .anyRequest().permitAll())
                 .formLogin(form -> form
@@ -63,15 +72,17 @@ public class SecurityConfig {
                 .logout(logout -> logout.permitAll())
                 .userDetailsService(userDetailsService());
         
-        httpSecurity.oauth2Login(Customizer.withDefaults()).logout(logout->logout.permitAll());
+        httpSecurity.oauth2Login(oAuth2->oAuth2.successHandler(oAuth2SuccessHandler))
+        			.logout(logout->logout.permitAll());
 		return httpSecurity.build();
 	}
+    
 
     @Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config =  new CorsConfiguration();
-		config.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));
-		config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+		config.setAllowedOrigins(Arrays.asList(backendURL,frontendURL));
+		config.setAllowedMethods(Arrays.asList("*"));
 		config.setAllowedHeaders(Arrays.asList("*"));
 		config.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

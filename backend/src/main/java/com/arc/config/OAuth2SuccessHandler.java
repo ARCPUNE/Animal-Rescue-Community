@@ -1,0 +1,134 @@
+package com.arc.config;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import com.arc.entities.User;
+import com.arc.entities.User.Role;
+import com.arc.repository.UserRepository;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Component
+public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+
+	@Value("${frontend.url}")
+	private String frontendURL;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws ServletException, IOException {
+
+		OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
+		String authorizedClient = authenticationToken.getAuthorizedClientRegistrationId();
+
+		// Handle OAuth2 login for GitHub and Google
+		if (authorizedClient.equals("github") || authorizedClient.equals("google")) {
+			handleOAuth2Login(authenticationToken, authorizedClient);
+		}
+
+		this.setAlwaysUseDefaultTargetUrl(false); // Not mandatory as this is the default behavior
+		this.setDefaultTargetUrl("/"); // Fallback URL in case there is no saved request
+
+		super.onAuthenticationSuccess(request, response, authentication);
+	}
+
+	/**
+	 * Handles the OAuth2 login process for different providers.
+	 *
+	 * @param authenticationToken The authentication token containing user details.
+	 * @param authorizedClient    The name of the OAuth2 provider (e.g., "github" or
+	 *                            "google").
+	 */
+	private void handleOAuth2Login(OAuth2AuthenticationToken authenticationToken, String authorizedClient) {
+
+		// Get the authenticated user's attributes
+		DefaultOAuth2User principal = (DefaultOAuth2User) authenticationToken.getPrincipal();
+		Map<String, Object> attributes = principal.getAttributes();
+
+		String email = (attributes.get("email") != null) ? attributes.get("email").toString() : ""; // Retrieve the
+																									// user's email
+		String name = attributes.getOrDefault("name", "").toString(); // Retrieve the user's name
+
+		// Check if the user already exists in the database
+		userRepository.findByEmail(email).ifPresentOrElse(user -> {
+			// Authenticate existing user
+			authenticateExistingUser(user, attributes, authorizedClient);
+		}, () -> {
+			// Create and authenticate a new user if not found
+			createAndAuthenticateNewUser(name, email, authorizedClient, attributes);
+		});
+	}
+
+	/**
+	 * Authenticates an existing user by setting up the security context.
+	 *
+	 * @param user             The existing user.
+	 * @param attributes       The attributes of the authenticated user.
+	 * @param authorizedClient The OAuth2 provider (e.g., "github" or "google").
+	 */
+	private void authenticateExistingUser(User user, Map<String, Object> attributes, String authorizedClient) {
+
+		// Set the user's authorities based on their role
+		List<? extends GrantedAuthority> authorities = user.getAuthorities();
+
+		// Create an OAuth2 user with the authorities
+		DefaultOAuth2User existingUser = null;
+		if (authorizedClient.equals("github")) {
+			existingUser = new DefaultOAuth2User(authorities, attributes, "id");
+		} else if (authorizedClient.equals("google")) {
+			existingUser = new DefaultOAuth2User(authorities, attributes, "name");
+		}
+
+		// Set the authentication in the security context
+		Authentication securityAuth = new OAuth2AuthenticationToken(existingUser, authorities, authorizedClient);
+		SecurityContextHolder.getContext().setAuthentication(securityAuth);
+	}
+
+	/**
+	 * Creates and authenticates a new user.
+	 *
+	 * @param name             The name of the new user.
+	 * @param email            The email of the new user.
+	 * @param authorizedClient The OAuth2 provider (e.g., "github" or "google").
+	 * @param attributes       The attributes of the authenticated user.
+	 */
+	private void createAndAuthenticateNewUser(String name, String email, String authorizedClient,
+			Map<String, Object> attributes) {
+		// Create a new user entity
+		User newUser = null;
+		if (email.isBlank()) {
+			newUser = new User(null, "guest", "guest@gmail.com", (new BCryptPasswordEncoder()).encode(authorizedClient),
+					null, Role.ROLE_Guest, null);
+		} else {
+			newUser = new User(null, name, email, (new BCryptPasswordEncoder()).encode(authorizedClient), null,
+					Role.ROLE_Volunteer, null);
+		}
+
+		// Authenticate new user
+		authenticateExistingUser(newUser, attributes, authorizedClient);
+
+		if (!email.isBlank()) {
+			// Save the new user to the database
+			userRepository.save(newUser);
+		}
+
+	}
+}
