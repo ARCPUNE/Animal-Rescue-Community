@@ -16,7 +16,7 @@ import com.arc.dto.DonationDTO;
 import com.arc.service.DonationService;
 
 @RestController
-@RequestMapping("/donations")
+@RequestMapping("/api/donations")
 public class DonationsController {
 
 	@Autowired

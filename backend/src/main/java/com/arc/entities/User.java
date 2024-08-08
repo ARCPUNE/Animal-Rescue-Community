@@ -48,10 +48,6 @@ public class User {
 	@Column(name = "address", length = 255)
 	private String address;
 
-	public enum Role {
-		ROLE_Admin, ROLE_Volunteer, ROLE_Guest;
-	}
-
 	public List<? extends GrantedAuthority> getAuthorities() {
 		// Convert roles to a collection of GrantedAuthority
 		return List.of(new SimpleGrantedAuthority(role.toString()));

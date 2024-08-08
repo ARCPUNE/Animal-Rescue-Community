@@ -1,6 +1,6 @@
 package com.arc.dto;
 
-import com.arc.entities.User.Role;
+import com.arc.entities.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 

@@ -16,7 +16,7 @@ import com.arc.dto.AnimalDTO;
 import com.arc.service.AnimalService;
 
 @RestController
-@RequestMapping("/animals")
+@RequestMapping("/api/animals")
 public class AnimalsController {
 
 	@Autowired
