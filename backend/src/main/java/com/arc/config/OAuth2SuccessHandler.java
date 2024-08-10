@@ -15,8 +15,8 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.arc.entities.Role;
 import com.arc.entities.User;
-import com.arc.entities.User.Role;
 import com.arc.repository.UserRepository;
 
 import jakarta.servlet.ServletException;
@@ -116,7 +116,7 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 		User newUser = null;
 		if (email.isBlank()) {
 			newUser = new User(null, "guest", "guest@gmail.com", (new BCryptPasswordEncoder()).encode(authorizedClient),
-					null, Role.ROLE_Guest, null);
+					null, Role.ROLE_Volunteer, null);
 		} else {
 			newUser = new User(null, name, email, (new BCryptPasswordEncoder()).encode(authorizedClient), null,
 					Role.ROLE_Volunteer, null);

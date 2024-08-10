@@ -1,19 +1,19 @@
-// src/App.jsx
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login.jsx';
-import Home from './components/Home';
 
-const App = () => {
-    return (
-            <Router>
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/" element={<Home />} />
-                </Routes>
-            </Router>
+import { useState } from 'react'
+import Header from './components/Header/Header'
+import Footer from './components/Footer/Footer'
+import Home from './components/Home/Home'
 
-    );
-};
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+    {/* <Header />
+    <Home />
+    <Footer /> */}
+    </>
+  )
+}
 
 export default App;
