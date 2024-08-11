@@ -3,7 +3,8 @@ package com.arc.service.impl;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +15,25 @@ import com.arc.exception.UserNotFoundException;
 import com.arc.repository.UserRepository;
 import com.arc.service.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 	
-	@Autowired
-	private ModelMapper mapper;
-	
-	@Autowired
-	private PasswordEncoder encoder;
-	
-	@Autowired
-	private UserRepository userRepository;
+	private final ModelMapper mapper;
+	private final PasswordEncoder encoder;
+	private final UserRepository userRepository;
 
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(username)
+				.orElseThrow(()->new UserNotFoundException("User with username "+ username+" not found"));
+
+		
+		return User.build(user);
+	}
+	
 	@Override
 	public List<UserDTO> getAllUsers() {
 		

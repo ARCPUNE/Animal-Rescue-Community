@@ -1,7 +1,7 @@
 package com.arc.security;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 	public void authenticateExistingUser(User user, Map<String, Object> attributes, String authorizedClient) {
 
 		// Set the user's authorities based on their role
-		List<? extends GrantedAuthority> authorities = user.getAuthorities();
+		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
 		// Create an OAuth2 user with the authorities
 		DefaultOAuth2User existingUser = new DefaultOAuth2User(authorities, attributes, "name");

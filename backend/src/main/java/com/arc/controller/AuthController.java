@@ -1,47 +1,40 @@
 package com.arc.controller;
 
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.arc.repository.UserRepository;
-import com.arc.security.OAuth2SuccessHandler;
-import com.arc.service.GoogleTokenVerifier;
+import com.arc.dto.JwtRequest;
+import com.arc.dto.JwtResponse;
+import com.arc.dto.SignUpRequest;
+import com.arc.service.AuthenticationService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-	@Autowired
-	private GoogleTokenVerifier googleTokenVerifier;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private OAuth2SuccessHandler oAuth2UserService;
+	private final AuthenticationService authenticationService;
 
-	@PostMapping("/api/auth/google")
-	public ResponseEntity<?> authenticateWithGoogle(@RequestBody Map<String, String> body) {
-		String token = body.get("token");
-		Map<String, Object> attributes = googleTokenVerifier.verifyToken(token);
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody JwtRequest request) throws Exception {
 
-		String email = (attributes.get("email") != null) ? attributes.get("email").toString() : "";
-		String name = (attributes.get("name") != null) ? attributes.get("name").toString() : "";
+		JwtResponse response = authenticationService.login(request);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 
-		if (email.isEmpty()) {
-			return ResponseEntity.badRequest().body("Email is not available in the OAuth2 attributes");
-		}
-
-		userRepository.findByEmail(email).ifPresentOrElse(user -> {
-			// Authenticate existing user
-			oAuth2UserService.authenticateExistingUser(user, attributes, "google");
-		}, () -> {
-			// Create and authenticate a new user if not found
-			oAuth2UserService.createAndAuthenticateNewUser(name, email, "google", attributes);
-		});
-
-		return ResponseEntity.ok().body("User authenticated successfully");
 	}
+
+	@PostMapping("/signup")
+	public ResponseEntity<?> signup(@RequestBody SignUpRequest request) {
+		
+		UserDetails signup = authenticationService.signup(request);
+		return new ResponseEntity<>(signup, HttpStatus.OK);
+	}
+
 }

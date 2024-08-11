@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,11 +39,18 @@ public class GlobalExceptionHandler {
 		return new ApiResponse(ex.getMessage());
 	}
 	
+	@ExceptionHandler(BadCredentialsException.class)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	public ApiResponse handleBadCredentialsException() {
+		return new ApiResponse( "Credentials Invalid !!");
+	}
+	
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ApiResponse handleRuntimeException(RuntimeException ex) {
 		return new ApiResponse(ex.getMessage());
 	}
+	
 	
 	
 	

@@ -28,7 +28,6 @@ public class UserDTO {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	
-	@NotBlank(message = "Phone cannot be Blank")
 	private String phoneNo;
 	
 	@NotNull
