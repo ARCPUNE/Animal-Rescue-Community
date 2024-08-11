@@ -11,9 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JwtResponse {
+public class RefreshTokenRequest {
 	
-	private String jwtToken;
-	private String username;
+	private String token;
 
 }

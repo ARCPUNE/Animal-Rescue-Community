@@ -1,6 +1,7 @@
 package com.arc.security.jwt;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
@@ -21,7 +22,18 @@ public class JwtserviceImpl implements JwtService {
 		return Jwts.builder()
 				   .subject(userDetails.getUsername())
 				   .issuedAt(new Date(System.currentTimeMillis()))
-				   .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 24))
+				   .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 60 * 24))
+				   .signWith(getSignKey(),Jwts.SIG.HS256)
+				   .compact();
+	}
+	
+	@Override
+	public String generateRefreshToken(HashMap<String, Object> extraClaims, UserDetails userDetails) {
+		return Jwts.builder()
+				   .claims(extraClaims)
+				   .subject(userDetails.getUsername())
+				   .issuedAt(new Date(System.currentTimeMillis()))
+				   .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
 				   .signWith(getSignKey(),Jwts.SIG.HS256)
 				   .compact();
 	}
@@ -59,5 +71,7 @@ public class JwtserviceImpl implements JwtService {
 	private boolean isTokenExpired(String token) {
 		return extractClaim(token, Claims::getExpiration).before(new Date());
 	}
+
+	
 	
 }

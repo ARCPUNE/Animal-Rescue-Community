@@ -45,35 +45,19 @@ public class SecurityConfig {
 
         http
         	.csrf(csrf -> csrf.disable())
-//    		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
-//        	.cors(cors->cors.disable())
+    		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(requests -> 
             requests
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/api/users").hasRole("Admin")
                 .anyRequest().authenticated())
 //            	.oauth2Login(oAuth2->
 //            		oAuth2.successHandler(oAuth2SuccessHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
-//            .userDetailsService(userService)
         ;
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-
-//        http
-//        .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-//        		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
-//        		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        		.authorizeHttpRequests(requests -> requests
-//        				
-//                          .requestMatchers("/", "/index.html", "/login**", "/error**").permitAll()
-//                        .anyRequest().authenticated())
-//                .formLogin(form -> form.disable())
-//                .logout(logout -> logout.permitAll())
-//				.userDetailsService(
-//						userDetailsService)
-////				.oauth2Login(oAuth2->
-////					oAuth2.successHandler(oAuth2SuccessHandler))
-											 
+									 
 		return http.build();
 	}
     
