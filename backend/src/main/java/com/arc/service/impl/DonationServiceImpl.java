@@ -1,92 +1,115 @@
 package com.arc.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.DonationDTO;
 import com.arc.entities.Donation;
 import com.arc.exception.DonationNotFoundException;
 import com.arc.repository.DonationRepository;
 import com.arc.service.DonationService;
+import com.arc.service.FileService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class DonationServiceImpl implements DonationService {
-	
-	@Autowired
-	private ModelMapper mapper;
-	
-	@Autowired
-	private DonationRepository donationRepository;
-	
+
+	@Value("${project.img.donations}")
+	private String path;
+
+	@Value("${backend.url}")
+	private String backendURL;
+
+	private final ModelMapper mapper;
+	private final FileService fileService;
+	private final DonationRepository donationRepository;
+
 	@Override
-	public List<DonationDTO> getAllDonations() throws DonationNotFoundException{
-		
+	public List<DonationDTO> getAllDonations() throws DonationNotFoundException {
+
 		// Check if donations are available
-		if(donationRepository.count() > 0) {
+		if (donationRepository.count() > 0) {
 
-		return donationRepository.findAllDonationsWithUsers() // Get all donation entities from DB
-			.stream() // Convert donation list to stream
-			.map(entity-> // map every donation
-				mapper.map(entity, DonationDTO.class) // Convert donation entity to donation DTO
-				).toList(); // Convert Stream back to list
+			return donationRepository.findAllDonationsWithUsers() // Get all donation entities from DB
+					.stream() // Convert donation list to stream
+					.map(entity -> {
+						DonationDTO donationDTO = mapper.map(entity, DonationDTO.class);
+						String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+						donationDTO.setDonationProofURL(photoUrl);
+						return donationDTO;
+					}).toList(); // Convert Stream back to list
 		}
-			throw new DonationNotFoundException("No Donations Available");
+		throw new DonationNotFoundException("No Donations Available");
 	}
 
 	@Override
-	public DonationDTO getDonation(Long id) throws DonationNotFoundException{
-		// Check if id is not null and donation with specified id exists
-		if (id != null && donationRepository.existsById(id)) {
-			
-			// Get donation from Repository
-			Donation donation = donationRepository.findById(id)
-					.orElseThrow(()->new DonationNotFoundException("Donation with id "+ id + " do not exist"));
-			
-			//  map donation to DonationDTO and return it
-			return mapper.map(donation, DonationDTO.class);			
-		}
-		throw new DonationNotFoundException("Donation with id "+ id + " do not exist");
+	public DonationDTO getDonation(Long id) throws DonationNotFoundException {
+		// Get donation from Repository
+		Donation donation = donationRepository.findById(id)
+				.orElseThrow(() -> new DonationNotFoundException("Donation with id " + id + " do not exist"));
+
+		// map donation to DonationDTO and return it
+		DonationDTO donationDTO = mapper.map(donation, DonationDTO.class);
+
+		String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+		donationDTO.setDonationProofURL(photoUrl);
+		return donationDTO;
 	}
 
 	@Override
-	public DonationDTO addNewDonation(DonationDTO donationDTO) {
-		
-		return mapper.map(
-			donationRepository.save(
-					mapper.map(donationDTO, Donation.class) // Map donationDTO to donation and save it in DB
-					), DonationDTO.class); // map the saved donation entity to donationDTO and return it
+	public DonationDTO addNewDonation(DonationDTO donationDTO, MultipartFile file) throws IOException {
+		String uploadedFileName = fileService.uploadFile(path, file);
+
+		donationDTO.setDonationProof(uploadedFileName);
+		Donation donation = donationRepository.save(mapper.map(donationDTO, Donation.class));
+
+		String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+
+		donationDTO = mapper.map(donation, DonationDTO.class);
+		donationDTO.setDonationProofURL(photoUrl);
+		return donationDTO;
+
 	}
 
 	@Override
-	public DonationDTO updateDonation(Long id, DonationDTO donationDTO) throws DonationNotFoundException {
-		// Check if id is not null and donation with specified id exists
-		if (id == null || !donationRepository.existsById(id)) {
-			throw new DonationNotFoundException("Donation with id "+ id + " do not exist");
-		}
-		
+	public DonationDTO updateDonation(Long id, DonationDTO donationDTO, MultipartFile file)
+			throws IOException, DonationNotFoundException {
+
 		// Get Donation from Repository
-		Donation donation = donationRepository.findById(id).orElseThrow(()->new DonationNotFoundException("Donation with id "+ id + " do not exist"));
-	
-		// Update Donation details
-		mapper.map(donationDTO,donation);
+		Donation donation = donationRepository.findById(id)
+				.orElseThrow(() -> new DonationNotFoundException("Donation with id " + id + " do not exist"));
+
+		if (file != null) {
+			String uploadedFileName = fileService.uploadFile(path, file);
+
+			donationDTO.setDonationProof(uploadedFileName);
+		}
 		
-		// save Donation in database and map the returned Donation entity to DonationDTO 
-		return mapper.map(donationRepository.save(donation), DonationDTO.class);
-	}
+		// Update Donation details
+		mapper.map(donationDTO, donation);
+
+		String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+
+		donationDTO = mapper.map(donationRepository.save(donation), DonationDTO.class);
+		donationDTO.setDonationProofURL(photoUrl);
+		
+		return donationDTO;
+		}
 
 	@Override
 	public void deleteDonation(Long id) {
-		
+
 		// Check if id is not null
 		if (id != null) {
 			donationRepository.deleteById(id);
-		}		
+		}
 	}
-	
-	
-	
-	
+
 }

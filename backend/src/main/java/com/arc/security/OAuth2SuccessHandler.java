@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,24 +17,27 @@ import org.springframework.stereotype.Component;
 import com.arc.entities.Role;
 import com.arc.entities.User;
 import com.arc.repository.UserRepository;
+import com.arc.security.jwt.JwtService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
 	@Value("${frontend.url}")
 	private String frontendURL;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final JwtService jwtService;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws ServletException, IOException {
-
+		System.out.println("success handler");
 		OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
 		String authorizedClient = authenticationToken.getAuthorizedClientRegistrationId();
 
@@ -47,6 +49,15 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 		this.setAlwaysUseDefaultTargetUrl(false); // Not mandatory as this is the default behavior
 		this.setDefaultTargetUrl("/"); // Fallback URL in case there is no saved request
 
+		@SuppressWarnings("null")
+		String email = ((DefaultOAuth2User)authentication.getPrincipal()).getAttribute("email").toString();
+		
+		User user = userRepository.findByEmail(email).orElseThrow();
+		
+		String token = jwtService.generateToken(user);
+		
+		response.addHeader("Authorization", "Bearer "+ token);
+		
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
 
@@ -107,7 +118,7 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 			Map<String, Object> attributes) {
 		// Create a new user entity
 		User newUser = new User(null, name, email, (new BCryptPasswordEncoder()).encode(authorizedClient), null,
-				Role.ROLE_Volunteer, null);
+				Role.ROLE_Volunteer, null,null);
 
 		// Authenticate new user
 		authenticateExistingUser(newUser, attributes, authorizedClient);

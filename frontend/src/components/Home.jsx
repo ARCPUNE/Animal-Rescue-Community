@@ -3,7 +3,7 @@ import axios from "axios";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import Login from "./Login.jsx"
 
-const CLIENT_ID = ""
+const CLIENT_ID = "692573051434-0hgefjephdiesb84o5amemldf3643n6c.apps.googleusercontent.com"
 // const REDIRECT_URI = "http://localhost:8080/login/oauth2/code/google"
 
 const Home = () => {
@@ -26,7 +26,7 @@ const Home = () => {
       return;
     }
 
-    axios.get(`http://localhost:8080/${path}`, {
+    axios.get(`http://localhost:8080/api/${path}`, {
       headers: {
         Authorization: `Bearer ${storedToken}`
       }

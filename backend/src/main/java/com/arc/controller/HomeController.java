@@ -5,12 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//@RequestMapping("/")
 public class HomeController {
-	
 	
 	@GetMapping
 	public ResponseEntity<?> name() {
+		
 		return ResponseEntity.ok("<h1>Home</h1>");
 	}
 		

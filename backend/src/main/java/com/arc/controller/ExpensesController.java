@@ -1,26 +1,33 @@
 package com.arc.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.ExpenseDTO;
 import com.arc.service.ExpenseService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/expenses")
 public class ExpensesController {
 
-	@Autowired
-	private ExpenseService expenseService;
+	private final ExpenseService expenseService;
+	private final ObjectMapper mapper;
 	
 	@GetMapping
 	public ResponseEntity<?> getAllExpenses() {
@@ -33,13 +40,15 @@ public class ExpensesController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> addNewExpense(@RequestBody ExpenseDTO expenseDTO) {		
-		return ResponseEntity.status(HttpStatus.CREATED).body(expenseService.addNewExpense(expenseDTO));
+	public ResponseEntity<?> addNewExpense(@RequestPart String expenseDTO, @RequestPart MultipartFile file) throws IOException {		
+		ExpenseDTO dto = mapper.readValue(expenseDTO, ExpenseDTO.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(expenseService.addNewExpense(dto,file));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestBody ExpenseDTO expenseDTO) {		
-		return ResponseEntity.status(HttpStatus.OK).body(expenseService.updateExpense(id, expenseDTO));
+	public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestPart String expenseDTO, @Nullable MultipartFile file) throws IOException {		
+		ExpenseDTO dto = mapper.readValue(expenseDTO, ExpenseDTO.class);
+		return ResponseEntity.status(HttpStatus.OK).body(expenseService.updateExpense(id, dto,file));
 	}
 	
 	@DeleteMapping("/{id}")

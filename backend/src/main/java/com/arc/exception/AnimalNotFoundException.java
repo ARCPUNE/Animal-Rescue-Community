@@ -1,6 +1,6 @@
 package com.arc.exception;
 
-public class AnimalNotFoundException extends RuntimeException {
+public class AnimalNotFoundException extends NotFoundException {
 
 	private static final long serialVersionUID = 1L;
 

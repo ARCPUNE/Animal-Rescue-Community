@@ -1,10 +1,9 @@
 package com.arc.security;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.arc.security.jwt.JwtAuthenticationFilter;
 import com.arc.service.UserService;
@@ -45,16 +42,26 @@ public class SecurityConfig {
 
         http
         	.csrf(csrf -> csrf.disable())
-    		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
+//        	.cors(cors->cors.disable())
+//    		.cors(cors-> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(requests -> 
             requests
-                .requestMatchers("/auth/**").permitAll()
+            	.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                .requestMatchers("/auth/**","/","/forgot/**","/swagger-ui/index.html","/oauth2/authorization/google").permitAll()
                 .requestMatchers("/api/users").hasRole("Admin")
                 .anyRequest().authenticated())
 //            	.oauth2Login(oAuth2->
 //            		oAuth2.successHandler(oAuth2SuccessHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
+            .cors(cors -> cors.configurationSource(request -> {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.addAllowedOrigin(frontendURL);
+                corsConfiguration.addAllowedMethod("*");
+                corsConfiguration.addAllowedHeader("*");
+                corsConfiguration.setAllowCredentials(true);
+                return corsConfiguration;
+            }))
         ;
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 									 
@@ -67,19 +74,6 @@ public class SecurityConfig {
     	provider.setUserDetailsService(userService);
     	provider.setPasswordEncoder(encoder);
 		return provider;
-	}
-
-
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration config =  new CorsConfiguration();
-		config.setAllowedOrigins(Arrays.asList(frontendURL,backendURL));
-		config.setAllowedMethods(Arrays.asList("*"));
-		config.setAllowedHeaders(Arrays.asList("*"));
-		config.setAllowCredentials(true);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", config);
-		return source;
 	}
     
     @Bean

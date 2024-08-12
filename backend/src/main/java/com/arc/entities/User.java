@@ -17,8 +17,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +30,7 @@ import lombok.NoArgsConstructor;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "Users")
+@Builder
 public class User implements UserDetails {
 
 	@Id
@@ -42,7 +45,7 @@ public class User implements UserDetails {
 	private String email;
 
 	@Column(name = "password", length = 255, nullable = false)
-	@JsonProperty(access =  Access.WRITE_ONLY)
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@Column(name = "phone_no", length = 10)
@@ -55,18 +58,8 @@ public class User implements UserDetails {
 	@Column(name = "address", length = 255)
 	private String address;
 
-public static User build(User user) {
-		
-		return new User(
-				user.getId(),
-				user.getName(),
-				user.getEmail(),
-				user.getPassword(),
-				user.getPhoneNo(),
-				user.getRole(),
-				user.getAddress()
-				);
-	}
+	@OneToOne(mappedBy = "user")
+	private ForgotPassword forgotPassword;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
