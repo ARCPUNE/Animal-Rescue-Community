@@ -18,6 +18,7 @@ const PetAdoptionForm = () => {
     terms: Array(11).fill(false),
   });
 
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name.startsWith('term')) {
