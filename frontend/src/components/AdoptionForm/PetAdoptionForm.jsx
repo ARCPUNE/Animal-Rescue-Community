@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './PetAdoptionForm.css';
-import logo from './ArcLogo.png'; 
 
 const PetAdoptionForm = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +18,7 @@ const PetAdoptionForm = () => {
     terms: Array(11).fill(false),
   });
 
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name.startsWith('term')) {
@@ -40,7 +40,6 @@ const PetAdoptionForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.terms.every(term => term)) {
-    
       console.log('Form submitted:', formData);
     } else {
       alert('Please agree to all terms and conditions before submitting.');
@@ -57,11 +56,9 @@ const PetAdoptionForm = () => {
   return (
     <div className="form-container">
       <div className="header">
-        <img src={logo} alt="Logo" className="logo" />
         <h1>Pet Adoption Commitment Form</h1>
       </div>
       <form onSubmit={handleSubmit}>
-     
         <div className="form-group">
           <label htmlFor="date">Date:</label>
           <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} />
@@ -96,7 +93,6 @@ const PetAdoptionForm = () => {
           <textarea id="description" name="description" value={formData.description} onChange={handleChange}></textarea>
         </div>
 
-       
         <div className="form-group">
           <label htmlFor="adopterName">Adopter's Full Name:</label>
           <input type="text" id="adopterName" name="adopterName" value={formData.adopterName} onChange={handleChange} />
@@ -127,19 +123,30 @@ const PetAdoptionForm = () => {
           </select>
         </div>
 
-     
         <div className="form-group">
           <h3>Terms and Conditions</h3>
           <div className="checkbox-group">
-            {formData.terms.map((term, index) => (
+            {[
+              "I have adopted this animal throughout the entire lifetime of the animal.",
+              "I agree to have the foster parent or a representative visit my premises.",
+              "I agree to never tie the animal & to provide a nourishing diet.",
+              "I agree to have the animal vaccinated against Rabies and other diseases.",
+              "I agree to provide medical aid to the animal as necessary.",
+              "I agree to adopt the animal as a companion and not as a gift.",
+              "I agree not to give the animal away or abandon it.",
+              "I agree not to leave the animal unsupervised around children.",
+              "I agree to treat the animal with respect, love, and care.",
+              "I am aware that the animal needs to be dewormed regularly.",
+              "I agree to sterilize the animal at the appropriate age.",
+            ].map((term, index) => (
               <label key={index}>
                 <input
                   type="checkbox"
                   name={`term-${index}`}
-                  checked={term}
+                  checked={formData.terms[index]}
                   onChange={handleChange}
                 />
-                {index + 1}. I have adopted this animal throughout the entire lifetime of the animal.
+                {term}
               </label>
             ))}
           </div>
