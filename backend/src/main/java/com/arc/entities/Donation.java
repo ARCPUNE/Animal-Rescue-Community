@@ -12,7 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -44,10 +43,7 @@ public class Donation {
 	@Column(name = "payment_method", nullable = false)
 	private PaymentMethod paymentMethod;
 
-	@Lob
-//  @Column(name = "donation_proof", nullable = false)
-	@Column(name = "donation_proof")
-	private byte[] donationProof;
+	private String donationProof;
 
 	public enum PaymentMethod {
 		CASH, CARD, UPI

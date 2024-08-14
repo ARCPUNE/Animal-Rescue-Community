@@ -8,7 +8,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,8 +47,7 @@ public class Animal {
     @Column(nullable = false, length = 50)
     private String location;
 
-    @Lob
-    private byte[] photo;
+    private String photo;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

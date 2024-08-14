@@ -1,6 +1,6 @@
-package com.arc.entities;
+package com.arc.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 public class ApiResponse {
 	
 	private String message;
-	private LocalDateTime ts;
+	private Date ts;
 	
 	public ApiResponse(String message){
 		this.message = message;
-		this.ts = LocalDateTime.now();
+		this.ts = new Date(System.currentTimeMillis());
 	}
 
 }

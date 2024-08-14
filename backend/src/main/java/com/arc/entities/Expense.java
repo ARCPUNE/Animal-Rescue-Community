@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -40,8 +39,7 @@ public class Expense {
     @Column(length = 100)
     private String paidTo;
 
-    @Lob
-    private byte[] expenseProof;
+    private String expenseProof;
 
     @Column(columnDefinition = "TEXT")
     private String description;

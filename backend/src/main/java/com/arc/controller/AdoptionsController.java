@@ -16,7 +16,7 @@ import com.arc.dto.AdoptionDTO;
 import com.arc.service.AdoptionService;
 
 @RestController
-@RequestMapping("/adoptions")
+@RequestMapping("/api/adoptions")
 public class AdoptionsController {
 
 	@Autowired

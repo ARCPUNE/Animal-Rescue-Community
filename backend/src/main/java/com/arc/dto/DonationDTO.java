@@ -34,5 +34,6 @@ public class DonationDTO {
 	private PaymentMethod paymentMethod;
 
 	@NotNull(message = "Donation proof must be provided")
-	private byte[] donationProof;
+	private String donationProof;
+	private String donationProofURL;
 }
