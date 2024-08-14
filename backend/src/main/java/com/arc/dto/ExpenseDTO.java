@@ -29,7 +29,8 @@ public class ExpenseDTO {
     @Size(max = 100, message = "Paid to should not exceed 100 characters")
     private String paidTo;
 
-    private byte[] expenseProof;
+    private String expenseProof;
+    private String expenseProofURL;
 
     private String description;
 }

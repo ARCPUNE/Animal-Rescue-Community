@@ -42,7 +42,9 @@ public class AnimalDTO {
     private String location;
 
     @NotNull(message = "Photo must be provided")
-    private byte[] photo;
+    private String photo;
+    
+    private String photoURL;
 
     @NotNull(message = "Status must be provided")
     private Status status;

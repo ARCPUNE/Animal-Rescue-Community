@@ -1,6 +1,6 @@
 package com.arc.exception;
 
-public class DonationNotFoundException extends RuntimeException {
+public class DonationNotFoundException extends NotFoundException {
 
 	private static final long serialVersionUID = 1L;
 

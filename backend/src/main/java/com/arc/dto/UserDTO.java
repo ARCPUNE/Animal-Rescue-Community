@@ -1,6 +1,6 @@
 package com.arc.dto;
 
-import com.arc.entities.User.Role;
+import com.arc.entities.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -28,7 +28,6 @@ public class UserDTO {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	
-	@NotBlank(message = "Phone cannot be Blank")
 	private String phoneNo;
 	
 	@NotNull
