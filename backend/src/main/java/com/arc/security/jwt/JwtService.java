@@ -13,5 +13,7 @@ public interface JwtService {
 	boolean isTokenValid(String token, UserDetails userDetails);
 
 	String generateRefreshToken(HashMap<String, Object> extraClaims, UserDetails userDetails);
+
+	String generateToken(String email);
 	
 }

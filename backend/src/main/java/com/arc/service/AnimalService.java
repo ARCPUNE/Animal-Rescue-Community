@@ -21,7 +21,7 @@ public interface AnimalService {
 
 	AnimalDTO updateAnimal(Long id, AnimalDTO animalDTO, MultipartFile file) throws IOException;
 
-	void deleteAnimal(Long id);
+	void deleteAnimal(Long id) throws IOException;
 	
 	
 }

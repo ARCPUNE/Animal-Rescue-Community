@@ -24,8 +24,10 @@ import com.arc.security.jwt.JwtService;
 import com.arc.service.AuthenticationService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -68,6 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public JWTAuthenticationResponse refreshToken(RefreshTokenRequest request) {
 		String userEmail = jwtService.extractUserName(request.getToken());
+		log.info("Refresh Token Request received from "+ userEmail);
 		User user = userRepository.findByEmail(userEmail).orElseThrow(()->new InvalidJWTTokenException("Invalid Token"));
 		
 		if (jwtService.isTokenValid(request.getToken(), user)) {

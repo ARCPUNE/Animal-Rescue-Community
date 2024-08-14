@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arc.dto.ApiResponse;
 import com.arc.dto.ChangePassword;
-import com.arc.entities.ApiResponse;
 import com.arc.service.ForgotPasswordService;
 
 import lombok.RequiredArgsConstructor;

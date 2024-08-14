@@ -1,6 +1,9 @@
 package com.arc.service.impl;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -41,7 +44,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 					.stream() // Convert Expense list to stream
 					.map(entity -> {
 						ExpenseDTO expenseDTO = mapper.map(entity, ExpenseDTO.class);
-						String photoUrl = backendURL + "/file/expenses/" + expenseDTO.getExpenseProof();
+						String photoUrl = backendURL + "/"+path + expenseDTO.getExpenseProof();
 						expenseDTO.setExpenseProofURL(photoUrl);
 						return expenseDTO;
 					}).toList(); // Convert Stream back to list
@@ -73,7 +76,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 		Expense expense = expenseRepository.save(mapper.map(expenseDTO, Expense.class));
 
-		String photoUrl = backendURL + "/file/expenses/" + expenseDTO.getExpenseProof();
+		String photoUrl = backendURL + "/"+path + expenseDTO.getExpenseProof();
 
 		expenseDTO = mapper.map(expense, ExpenseDTO.class);
 		expenseDTO.setExpenseProofURL(photoUrl);
@@ -88,17 +91,20 @@ public class ExpenseServiceImpl implements ExpenseService {
 		Expense expense = expenseRepository.findById(id)
 				.orElseThrow(() -> new ExpenseNotFoundException("Expense with id " + id + " do not exist"));
 
+		String fileName = expense.getExpenseProof();
+		
 		if (file != null) {
-			String uploadedFileName = fileService.uploadFile(path, file);
-
-			expenseDTO.setExpenseProof(uploadedFileName);
+			Files.deleteIfExists(Paths.get(path + File.separator + fileName));
+			fileName = fileService.uploadFile(path, file);
 		}
+		
+		expenseDTO.setExpenseProof(fileName);
 
 		// Update Expense details
 		mapper.map(expenseDTO, expense);
 
 		// save expense in database and map the returned expense entity to expenseDTO
-		String photoUrl = backendURL + "/file/expenses/" + expenseDTO.getExpenseProof();
+		String photoUrl = backendURL + "/"+path + expenseDTO.getExpenseProof();
 
 		expenseDTO = mapper.map(expenseRepository.save(expense), ExpenseDTO.class);
 		expenseDTO.setExpenseProofURL(photoUrl);
@@ -106,10 +112,14 @@ public class ExpenseServiceImpl implements ExpenseService {
 	}
 
 	@Override
-	public void deleteExpense(Long id) {
+	public void deleteExpense(Long id) throws IOException {
 
 		// Check if id is not null
 		if (id != null) {
+			Expense expense = expenseRepository.findById(id)
+					.orElseThrow(() -> new ExpenseNotFoundException("Expense with id " + id + " do not exist"));
+			Files.deleteIfExists(Paths.get(path + File.separator + expense.getExpenseProof()));
+			
 			expenseRepository.deleteById(id);
 		}
 	}

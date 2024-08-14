@@ -48,11 +48,12 @@ public class ExpensesController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestPart String expenseDTO, @Nullable MultipartFile file) throws IOException {		
 		ExpenseDTO dto = mapper.readValue(expenseDTO, ExpenseDTO.class);
+		if(file != null && file.isEmpty()) file = null;
 		return ResponseEntity.status(HttpStatus.OK).body(expenseService.updateExpense(id, dto,file));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteExpense(@PathVariable Long id) {
+	public ResponseEntity<?> deleteExpense(@PathVariable Long id) throws IOException {
 		expenseService.deleteExpense(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted Successfully");
 	}

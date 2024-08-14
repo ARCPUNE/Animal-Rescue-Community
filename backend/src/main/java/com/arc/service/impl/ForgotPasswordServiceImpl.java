@@ -1,6 +1,5 @@
 package com.arc.service.impl;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
@@ -92,7 +91,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 		ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user)
 		.orElseThrow(()-> new OTPInvalidException("Invalid OTP for email "+ email));
 		
-		if (fp.getExpirationTime().before(Date.from(Instant.now()))) {
+		if (fp.getExpirationTime().before( new Date(System.currentTimeMillis()))) {
 			forgotPasswordRepository.deleteById(fp.getId());
 			throw new OTPInvalidException("OTP has Expired");
 		}

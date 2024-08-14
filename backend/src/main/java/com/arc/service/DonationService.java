@@ -22,7 +22,7 @@ public interface DonationService {
 
 	DonationDTO updateDonation(Long id, DonationDTO donationDTO, MultipartFile file) throws IOException, DonationNotFoundException;
 
-	void deleteDonation(Long id);
+	void deleteDonation(Long id) throws IOException;
 	
 	
 }

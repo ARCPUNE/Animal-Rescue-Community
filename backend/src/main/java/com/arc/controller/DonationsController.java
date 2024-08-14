@@ -48,11 +48,12 @@ public class DonationsController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateDonation(@PathVariable Long id, @RequestPart String donationDTO,@Nullable MultipartFile file) throws IOException {
 		DonationDTO dto = mapper.readValue(donationDTO, DonationDTO.class);
+		if(file != null && file.isEmpty()) file = null;
 		return ResponseEntity.status(HttpStatus.OK).body(donationService.updateDonation(id, dto,file));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteDonation(@PathVariable Long id) {
+	public ResponseEntity<?> deleteDonation(@PathVariable Long id) throws IOException {
 		donationService.deleteDonation(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted Successfully");
 	}

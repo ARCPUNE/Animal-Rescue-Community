@@ -21,6 +21,6 @@ public interface ExpenseService {
 
 	ExpenseDTO updateExpense(Long id, ExpenseDTO expenseDTO, MultipartFile file) throws IOException;
 
-	void deleteExpense(Long id);
+	void deleteExpense(Long id) throws IOException;
 
 }

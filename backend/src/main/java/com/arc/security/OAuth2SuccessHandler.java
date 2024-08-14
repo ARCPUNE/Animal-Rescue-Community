@@ -23,8 +23,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
@@ -37,27 +39,24 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws ServletException, IOException {
-		System.out.println("success handler");
+		log.info("success handler");
 		OAuth2AuthenticationToken authenticationToken = (OAuth2AuthenticationToken) authentication;
 		String authorizedClient = authenticationToken.getAuthorizedClientRegistrationId();
 
-		// Handle OAuth2 login for Google
-		if (authorizedClient.equals("google")) {
-			handleOAuth2Login(authenticationToken, authorizedClient);
-		}
+		handleOAuth2Login(authenticationToken, authorizedClient);
 
 		this.setAlwaysUseDefaultTargetUrl(false); // Not mandatory as this is the default behavior
 		this.setDefaultTargetUrl("/"); // Fallback URL in case there is no saved request
 
 		@SuppressWarnings("null")
-		String email = ((DefaultOAuth2User)authentication.getPrincipal()).getAttribute("email").toString();
-		
+		String email = ((DefaultOAuth2User) authentication.getPrincipal()).getAttribute("email").toString();
+
 		User user = userRepository.findByEmail(email).orElseThrow();
-		
+
 		String token = jwtService.generateToken(user);
-		
-		response.addHeader("Authorization", "Bearer "+ token);
-		
+
+		response.sendRedirect(frontendURL + "/home?token=" + token);
+
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
 
@@ -72,7 +71,7 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 		// Get the authenticated user's attributes
 		DefaultOAuth2User principal = (DefaultOAuth2User) authenticationToken.getPrincipal();
 		Map<String, Object> attributes = principal.getAttributes();
-
+		log.info(attributes.toString());
 		String email = attributes.get("email").toString(); // Retrieve the user's email
 		String name = attributes.getOrDefault("name", "").toString(); // Retrieve the user's name
 
@@ -118,7 +117,7 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 			Map<String, Object> attributes) {
 		// Create a new user entity
 		User newUser = new User(null, name, email, (new BCryptPasswordEncoder()).encode(authorizedClient), null,
-				Role.ROLE_Volunteer, null,null);
+				Role.ROLE_Volunteer, null, null);
 
 		// Authenticate new user
 		authenticateExistingUser(newUser, attributes, authorizedClient);

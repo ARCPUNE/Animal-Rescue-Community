@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/img")
 @RequiredArgsConstructor
 public class FileController {
 

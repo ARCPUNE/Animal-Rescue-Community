@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,23 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtserviceImpl implements JwtService {
+	
+	@Value("${jwt.secret.key}")
+	private String jwtSecretKey;
 
 	@Override
 	public String generateToken(UserDetails userDetails) {
 		return Jwts.builder()
 				   .subject(userDetails.getUsername())
+				   .issuedAt(new Date(System.currentTimeMillis()))
+				   .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 60 * 24))
+				   .signWith(getSignKey(),Jwts.SIG.HS256)
+				   .compact();
+	}
+	
+	public String generateToken(String email) {
+		return Jwts.builder()
+				   .subject(email)
 				   .issuedAt(new Date(System.currentTimeMillis()))
 				   .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 60 * 24))
 				   .signWith(getSignKey(),Jwts.SIG.HS256)
@@ -58,7 +71,7 @@ public class JwtserviceImpl implements JwtService {
 	}
 
 	private SecretKey getSignKey() {
-		byte[] key = Decoders.BASE64.decode("qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm");
+		byte[] key = Decoders.BASE64.decode(jwtSecretKey);
 		return Keys.hmacShaKeyFor(key);
 	}
 	
@@ -69,9 +82,13 @@ public class JwtserviceImpl implements JwtService {
 	}
 
 	private boolean isTokenExpired(String token) {
-		return extractClaim(token, Claims::getExpiration).before(new Date());
+		return extractClaim(token, Claims::getExpiration).before(new Date(System.currentTimeMillis()));
 	}
 
+	public String invalidateToken(String token) {
+		extractClaim(token, null);
+		return null;
+	}
 	
 	
 }

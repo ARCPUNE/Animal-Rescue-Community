@@ -15,6 +15,8 @@ public interface UserService extends UserDetailsService {
 	List<UserDTO> getAllUsers();
 
 	UserDTO getUser(Long id);
+	
+	UserDTO getUser(String token);
 
 	UserDTO addNewUser(UserDTO userDTO);
 

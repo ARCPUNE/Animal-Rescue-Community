@@ -1,6 +1,9 @@
 package com.arc.service.impl;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -41,7 +44,7 @@ public class DonationServiceImpl implements DonationService {
 					.stream() // Convert donation list to stream
 					.map(entity -> {
 						DonationDTO donationDTO = mapper.map(entity, DonationDTO.class);
-						String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+						String photoUrl = backendURL + "/"+path + donationDTO.getDonationProof();
 						donationDTO.setDonationProofURL(photoUrl);
 						return donationDTO;
 					}).toList(); // Convert Stream back to list
@@ -58,7 +61,7 @@ public class DonationServiceImpl implements DonationService {
 		// map donation to DonationDTO and return it
 		DonationDTO donationDTO = mapper.map(donation, DonationDTO.class);
 
-		String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+		String photoUrl = backendURL + "/"+path + donationDTO.getDonationProof();
 		donationDTO.setDonationProofURL(photoUrl);
 		return donationDTO;
 	}
@@ -70,7 +73,7 @@ public class DonationServiceImpl implements DonationService {
 		donationDTO.setDonationProof(uploadedFileName);
 		Donation donation = donationRepository.save(mapper.map(donationDTO, Donation.class));
 
-		String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+		String photoUrl = backendURL + "/"+path + donationDTO.getDonationProof();
 
 		donationDTO = mapper.map(donation, DonationDTO.class);
 		donationDTO.setDonationProofURL(photoUrl);
@@ -86,16 +89,19 @@ public class DonationServiceImpl implements DonationService {
 		Donation donation = donationRepository.findById(id)
 				.orElseThrow(() -> new DonationNotFoundException("Donation with id " + id + " do not exist"));
 
+		String fileName = donation.getDonationProof();
+		
 		if (file != null) {
-			String uploadedFileName = fileService.uploadFile(path, file);
-
-			donationDTO.setDonationProof(uploadedFileName);
+			Files.deleteIfExists(Paths.get(path + File.separator + fileName));
+			fileName = fileService.uploadFile(path, file);
 		}
+		
+		donationDTO.setDonationProof(fileName);
 		
 		// Update Donation details
 		mapper.map(donationDTO, donation);
 
-		String photoUrl = backendURL + "/file/donations/" + donationDTO.getDonationProof();
+		String photoUrl = backendURL + "/"+path + donationDTO.getDonationProof();
 
 		donationDTO = mapper.map(donationRepository.save(donation), DonationDTO.class);
 		donationDTO.setDonationProofURL(photoUrl);
@@ -104,10 +110,13 @@ public class DonationServiceImpl implements DonationService {
 		}
 
 	@Override
-	public void deleteDonation(Long id) {
+	public void deleteDonation(Long id) throws IOException {
 
 		// Check if id is not null
 		if (id != null) {
+			Donation donation = donationRepository.findById(id)
+					.orElseThrow(() -> new DonationNotFoundException("Donation with id " + id + " do not exist"));
+			Files.deleteIfExists(Paths.get(path + File.separator + donation.getDonationProof()));
 			donationRepository.deleteById(id);
 		}
 	}

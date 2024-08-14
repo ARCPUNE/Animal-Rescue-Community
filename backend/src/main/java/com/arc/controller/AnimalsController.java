@@ -52,11 +52,12 @@ public class AnimalsController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateAnimal(@PathVariable Long id, @RequestPart String animalDTO,@Nullable MultipartFile file) throws IOException {		
 		AnimalDTO dto = mapper.readValue(animalDTO, AnimalDTO.class);
+		if(file != null && file.isEmpty()) file = null;
 		return ResponseEntity.status(HttpStatus.OK).body(animalService.updateAnimal(id, dto,file));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
+	public ResponseEntity<?> deleteAnimal(@PathVariable Long id) throws IOException {
 		animalService.deleteAnimal(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted Successfully");
 	}

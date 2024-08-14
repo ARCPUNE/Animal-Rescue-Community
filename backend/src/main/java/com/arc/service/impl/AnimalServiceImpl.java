@@ -1,6 +1,9 @@
 package com.arc.service.impl;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -38,7 +41,7 @@ public class AnimalServiceImpl implements AnimalService {
 				.stream() // Convert animal list to stream
 				.map(entity -> {
 					AnimalDTO animalDTO = mapper.map(entity, AnimalDTO.class);
-					String photoUrl = backendURL + "/file/animals/" + animalDTO.getPhoto();
+					String photoUrl = backendURL + "/"+path + animalDTO.getPhoto();
 					animalDTO.setPhotoURL(photoUrl);
 					return animalDTO;
 				}).toList(); // Convert Stream back to list
@@ -54,7 +57,7 @@ public class AnimalServiceImpl implements AnimalService {
 		// map animal to AnimalDTO and return it
 		AnimalDTO animalDTO = mapper.map(animal, AnimalDTO.class);
 
-		String photoUrl = backendURL + "/file/animals/" + animalDTO.getPhoto();
+		String photoUrl = backendURL + "/"+path + animalDTO.getPhoto();
 		animalDTO.setPhotoURL(photoUrl);
 
 		return animalDTO;
@@ -71,7 +74,7 @@ public class AnimalServiceImpl implements AnimalService {
 		Animal animal = animalRepository.save(mapper.map(animalDTO, Animal.class)); // Map animalDTO to animal and save
 																					// it
 
-		String photoUrl = backendURL + "/file/animals/" + uploadedFileName;
+		String photoUrl = backendURL + "/"+path + uploadedFileName;
 
 		// map the saved animal entity to animalDTO and return it
 		animalDTO = mapper.map(animal, AnimalDTO.class);
@@ -86,11 +89,14 @@ public class AnimalServiceImpl implements AnimalService {
 		Animal animal = animalRepository.findById(id)
 				.orElseThrow(() -> new AnimalNotFoundException("Animal with id " + id + " do not exist"));
 
+		String fileName = animal.getPhoto();
+		
 		if (file != null) {
-			String uploadedFileName = fileService.uploadFile(path, file);
-
-			animalDTO.setPhoto(uploadedFileName);
+			Files.deleteIfExists(Paths.get(path + File.separator + fileName));
+			fileName = fileService.uploadFile(path, file);
 		}
+
+		animalDTO.setPhoto(fileName);
 
 		// Update Animal details
 		mapper.map(animalDTO, animal);
@@ -98,7 +104,7 @@ public class AnimalServiceImpl implements AnimalService {
 		// save animal in database and map the returned animal entity to animalDTO
 		animalDTO = mapper.map(animalRepository.save(animal), AnimalDTO.class);
 
-		String photoUrl = backendURL + "/file/animals/" + animal.getPhoto();
+		String photoUrl = backendURL + "/"+path + animal.getPhoto();
 		animalDTO.setPhotoURL(photoUrl);
 
 		return animalDTO;
@@ -106,9 +112,14 @@ public class AnimalServiceImpl implements AnimalService {
 	}
 
 	@Override
-	public void deleteAnimal(Long id) {
+	public void deleteAnimal(Long id) throws IOException {
 		// Check if id is not null
 		if (id != null) {
+			Animal animal = animalRepository.findById(id)
+					.orElseThrow(() -> new AnimalNotFoundException("Animal with id " + id + " do not exist"));
+			
+			Files.deleteIfExists(Paths.get(path + File.separator + animal.getPhoto()));
+			
 			animalRepository.deleteById(id);
 		}
 	}

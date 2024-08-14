@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.arc.entities.ApiResponse;
+import com.arc.dto.ApiResponse;
 import com.arc.exception.EmailSendingException;
 import com.arc.exception.InvalidException;
 import com.arc.exception.InvalidPasswordException;
