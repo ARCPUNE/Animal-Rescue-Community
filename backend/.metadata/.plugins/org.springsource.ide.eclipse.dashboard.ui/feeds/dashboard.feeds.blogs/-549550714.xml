@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Spring]]></title><description><![CDATA[Level up your Java code and explore what Spring can do for you.]]></description><link>https://spring.io</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 14 Aug 2024 09:51:11 GMT</lastBuildDate><item><title><![CDATA[This Week in Spring - August 13th, 2024]]></title><link>https://spring.io/blog/2024/08/13/this-week-in-spring-august-13th-2024</link><guid isPermaLink="true">https://spring.io/blog/2024/08/13/this-week-in-spring-august-13th-2024</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Tue, 13 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hi, Spring fans! Welcome to another installment of &lt;em&gt;This Week in Spring&lt;/em&gt;! It&apos;s Tuesday and work is well underway to prepare for the huge SpringOne event in Las Vegas in just a few short week&apos;s time! I&apos;m elated! So, let&apos;s get this roundup on the road so I can get back to the preparation frenzy...&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/08/09/spring-ai-embraces-openais-structured-outputs-enhancing-json-response&quot;&gt;Spring AI Embraces OpenAI&apos;s Structured Outputs: Enhancing JSON Response Reliability&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/08/08/a-bootiful-podcast-spring-cloud-dataflow-spring-cloud-task-and-spring-batch&quot;&gt;A Bootiful Podcast: Spring Cloud Dataflow, Spring Cloud Task, and Spring Batch legend Glenn Renfro&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/08/07/spring-tips-htmx&quot;&gt;in last week&apos;s installment of &lt;em&gt;Spring Tips&lt;/em&gt;, I looked at using Spring Boot and HTMX together&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;I love this: a bunch of opensource projects are working on a common set of annotations &lt;a href=&quot;https://www.infoq.com/news/2024/08/jspecify-java-nullability/&quot;&gt;to convey nullability and null-restricted types in Java&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;I love this: IntelliJ IDEA has a &lt;a href=&quot;https://x.com/yuriy_artamonov/status/1822370489597133287?s=61&quot;&gt;new feature: multi-project workspaces&lt;/a&gt;, which adds support for opening multiple projects in one window. Supports Maven, Gradle and arbitrary projects in IntelliJ IDEA.&lt;/li&gt;
+&lt;li&gt;nice find from Microsoft&apos;s Julien Dubois: French Olympic gold medalist Leon Marchand, fresh off winning four gold medals in swimming &lt;a href=&quot;https://olympics.com/fr/infos/leon-marchand-capable-rivaliser-meilleurs&quot;&gt;in the 2024 Paris Olympics, is a student at Arizona State University and studying Java&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;I am so looking forward to the SpringOne event! &lt;a href=&quot;https://springone.io&quot;&gt;Are you registered?&lt;/a&gt;. SpringOne is a part of VMware Explore. I&apos;ll be doing most of my talks on the livestream and one, with Spring Security lead Rob Winch, offstream. Here&apos;s &lt;a href=&quot;https://event.vmware.com/flow/vmware/explore2024lv/content/page/catalog?search=%22Josh%20Long%22&amp;#x26;tab.contentcatalogtabs=1627421929827001vRXW&quot;&gt;all the content I&apos;ll be a part of&lt;/a&gt;. The keynote figures to be amazing, of course, with a huge ensemble cast. That&apos;s a must-not-miss, of course. I&apos;ll be doing my normal Bootiful Spring Boot talk, too. And I&apos;ll be doing a talk on Passkeys with Spring Security lead Rob Winch. And, I&apos;ll be doing an Introduction to Spring AI with none other than Spring AI lead Dr. Mark Pollack and Spring founder Dr. Rod Johnson! Do not miss any of these!&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Spring AI Embraces OpenAI's Structured Outputs: Enhancing JSON Response Reliability]]></title><link>https://spring.io/blog/2024/08/09/spring-ai-embraces-openais-structured-outputs-enhancing-json-response</link><guid isPermaLink="true">https://spring.io/blog/2024/08/09/spring-ai-embraces-openais-structured-outputs-enhancing-json-response</guid><dc:creator><![CDATA[Christian Tzolov]]></dc:creator><pubDate>Fri, 09 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;OpenAI recently &lt;a href=&quot;https://openai.com/index/introducing-structured-outputs-in-the-api/&quot;&gt;introduced&lt;/a&gt; a powerful feature called Structured Outputs, which ensures that AI-generated responses adhere strictly to a predefined JSON schema. This feature significantly improves the reliability and usability of AI-generated content in real-world applications. Today, we&apos;re excited to announce that Spring AI (1.0.0-SNAPSHOT) has &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html#_structured_outputs&quot;&gt;fully integrated support&lt;/a&gt; for OpenAI&apos;s Structured Outputs, bringing this capability to Java developers in a seamless, Spring-native way.&lt;/p&gt;
+&lt;p&gt;Following diagram shows how the new Structured Outputs feature extends the &lt;a href=&quot;https://platform.openai.com/docs/api-reference/chat&quot;&gt;OpenAI Chat API&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;//images.ctfassets.net/mnrwi97vnhts/76DUCzHLPmiqz2GXcvPEXw/2370f14669c63cb8037abc2dbc7ee47f/Restored_Spring_AI__2_.jpg&quot; alt=&quot;Restored Spring AI (2)&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Spring AI already provides a powerful, &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html&quot;&gt;Model-agnostic Structured Output&lt;/a&gt; utilities that can be use with various AI models including the OpenAI.
+The OpenAI Structured Outputs feature offers an additional, consistent, but a model specific solution, currently available only to the &lt;code&gt;gpt-4o&lt;/code&gt;, &lt;code&gt;gpt-4o-mini&lt;/code&gt; and later models.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The OpenAI &lt;code&gt;Structured Outputs&lt;/code&gt; feature guarantees the AI model will generate responses that conform to a supplied &lt;a href=&quot;https://json-schema.org/overview/what-is-jsonschema&quot;&gt;JSON Schema&lt;/a&gt;. This addresses several common challenges in AI-powered applications: &lt;strong&gt;Type Safety&lt;/strong&gt;: No more worrying about missing required keys or invalid enum values; &lt;strong&gt;Explicit Refusals&lt;/strong&gt;: Safety-based model refusals become programmatically detectable; &lt;strong&gt;Simplified Prompting&lt;/strong&gt;: Achieve consistent formatting without resorting to overly specific prompts.&lt;/p&gt;
+&lt;p&gt;Spring AI allows developers to leverage this feature with minimal configuration. Let&apos;s explore how you can use it in your Spring applications.&lt;/p&gt;
+&lt;h2 id=&quot;programmatic-configuration&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#programmatic-configuration&quot; aria-label=&quot;programmatic configuration permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Programmatic Configuration&lt;/h2&gt;
+&lt;p&gt;You can set the response format programmatically with the OpenAiChatOptions builder as shown below:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;String jsonSchema = &quot;&quot;&quot;
+  {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: {
+          &quot;steps&quot;: {
+              &quot;type&quot;: &quot;array&quot;,
+              &quot;items&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;properties&quot;: {
+                      &quot;explanation&quot;: { &quot;type&quot;: &quot;string&quot; },
+                      &quot;output&quot;: { &quot;type&quot;: &quot;string&quot; }
+                  },
+                  &quot;required&quot;: [&quot;explanation&quot;, &quot;output&quot;],
+                  &quot;additionalProperties&quot;: false
+              }
+          },
+          &quot;final_answer&quot;: { &quot;type&quot;: &quot;string&quot; }
+      },
+      &quot;required&quot;: [&quot;steps&quot;, &quot;final_answer&quot;],
+      &quot;additionalProperties&quot;: false
+  }
+  &quot;&quot;&quot;;
+
+Prompt prompt = new Prompt(&quot;how can I solve 8x + 7 = -23&quot;,
+  OpenAiChatOptions.builder()
+      .withModel(ChatModel.GPT_4_O_MINI)
+      .withResponseFormat(new ResponseFormat(ResponseFormat.Type.JSON_SCHEMA, jsonSchema))
+      .build());
+
+ChatResponse response = this.openAiChatModel.call(prompt);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; You must adhere to the OpenAI &lt;a href=&quot;https://platform.openai.com/docs/guides/structured-outputs/supported-schemas&quot;&gt;subset of the JSON Schema&lt;/a&gt; language format.&lt;/p&gt;
+&lt;h3 id=&quot;using-the-beanoutputconverter&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#using-the-beanoutputconverter&quot; aria-label=&quot;using the beanoutputconverter permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Using the BeanOutputConverter&lt;/h3&gt;
+&lt;p&gt;Spring AI provides a convenient &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html#_bean_output_converter&quot;&gt;BeanOutputConverter&lt;/a&gt; utility that can automatically generate JSON schemas from your domain objects and convert structured responses into Java instances:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;record MathReasoning(
+  @JsonProperty(required = true, value = &quot;steps&quot;) Steps steps,
+  @JsonProperty(required = true, value = &quot;final_answer&quot;) String finalAnswer) {
+
+  record Steps(
+    @JsonProperty(required = true, value = &quot;items&quot;) Items[] items) {
+
+    record Items(
+      @JsonProperty(required = true, value = &quot;explanation&quot;) String explanation,
+      @JsonProperty(required = true, value = &quot;output&quot;) String output) {}
+  }
+}
+
+var outputConverter = new BeanOutputConverter&amp;#x3C;&gt;(MathReasoning.class);
+
+var jsonSchema = outputConverter.getJsonSchema();
+
+Prompt prompt = new Prompt(&quot;how can I solve 8x + 7 = -23&quot;,
+  OpenAiChatOptions.builder()
+      .withModel(ChatModel.GPT_4_O_MINI)
+      .withResponseFormat(new ResponseFormat(ResponseFormat.Type.JSON_SCHEMA, jsonSchema))
+      .build());
+
+ChatResponse response = this.openAiChatModel.call(prompt);
+String content = response.getResult().getOutput().getContent();
+
+MathReasoning mathReasoning = outputConverter.convert(content);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; Ensure you use the &lt;code&gt;@JsonProperty(required = true,…?)&lt;/code&gt; annotation.
+This is crucial for generating a schema that accurately marks fields as required. OpenAI &lt;a href=&quot;https://platform.openai.com/docs/guides/structured-outputs/all-fields-must-be-required&quot;&gt;mandates&lt;/a&gt; it for the structured response to function correctly.&lt;/p&gt;
+&lt;h2 id=&quot;configuring-via-application-properties&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#configuring-via-application-properties&quot; aria-label=&quot;configuring via application properties permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Configuring via Application Properties&lt;/h2&gt;
+&lt;p&gt;Alternatively, when using the &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html#_auto_configuration&quot;&gt;OpenAI auto-configuration&lt;/a&gt;, you can configure the desired response format through the following &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html#_chat_properties&quot;&gt;chat application properties&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;spring.ai.openai.api-key=YOUR_API_KEY
+spring.ai.openai.chat.options.model=gpt-4o-mini
+
+spring.ai.openai.chat.options.response-format.type=JSON_SCHEMA
+spring.ai.openai.chat.options.response-format.name=MySchemaName
+spring.ai.openai.chat.options.response-format.schema={&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;steps&quot;:{&quot;type&quot;:&quot;array&quot;,&quot;items&quot;:{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;explanation&quot;:{&quot;type&quot;:&quot;string&quot;},&quot;output&quot;:{&quot;type&quot;:&quot;string&quot;}},&quot;required&quot;:[&quot;explanation&quot;,&quot;output&quot;],&quot;additionalProperties&quot;:false}},&quot;final_answer&quot;:{&quot;type&quot;:&quot;string&quot;}},&quot;required&quot;:[&quot;steps&quot;,&quot;final_answer&quot;],&quot;additionalProperties&quot;:false}
+spring.ai.openai.chat.options.response-format.strict=true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;refusal-response&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#refusal-response&quot; aria-label=&quot;refusal response permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Refusal Response&lt;/h1&gt;
+&lt;p&gt;When using Structured Outputs, OpenAI models may occasionally refuse to fulfill the request for safety reasons. Since a refusal does not necessarily follow the schema you have supplied in response_format, the API response includes a new field called &lt;code&gt;refusal&lt;/code&gt; to indicate that the model refused to fulfill the request.&lt;/p&gt;
+&lt;p&gt;Spring AI maps this refusal field to the &lt;a href=&quot;https://github.com/spring-projects/spring-ai/blob/main/spring-ai-core/src/main/java/org/springframework/ai/chat/messages/AssistantMessage.java#L34&quot;&gt;AssistantMessage&lt;/a&gt;&apos;s metadata. Search by &lt;code&gt;refusal&lt;/code&gt; key.&lt;/p&gt;
+&lt;h1 id=&quot;future-work&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#future-work&quot; aria-label=&quot;future work permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Future work&lt;/h1&gt;
+&lt;p&gt;We are exploring the possibilities to integrate the new OpenAI specific Structured Outputs features into Spring AI&apos;s Model-agnostic Structured Output utility set.&lt;/p&gt;
+&lt;h1 id=&quot;references&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#references&quot; aria-label=&quot;references permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;References&lt;/h1&gt;
+&lt;p&gt;For further information check the Spring AI and OpenAI reference documentations.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html#_structured_outputs&quot;&gt;Spring AI OpenAI Structured Outputs&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html&quot;&gt;Spring AI, model-agnostic Structured Output converter&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://spring.io/blog/2024/05/09/spring-ai-structured-output&quot;&gt;Spring AI - Structured Output&lt;/a&gt; (blog)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://platform.openai.com/docs/guides/structured-outputs&quot;&gt;OpenAI Structured Outputs&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Spring AI Blogs:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/07/31/spring-ai-with-groq-a-blazingly-fast-ai-inference-engine&quot;&gt;Spring AI with Groq - a blazingly fast AI inference engine&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/07/26/spring-ai-with-ollama-tool-support&quot;&gt;Spring AI with Ollama Tool Support&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/05/09/spring-ai-structured-output&quot;&gt;Spring AI - Structured Output&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/04/19/spring-ai-multimodality-orbis-sensualium-pictus&quot;&gt;Spring AI - Multimodality - Orbis Sensualium Pictus&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/03/06/function-calling-in-java-and-spring-ai-using-the-latest-mistral-ai-api&quot;&gt;Function Calling in Java and Spring AI using the latest Mistral AI API&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2023/02/24/spring-cloud-function-for-azure-function&quot;&gt;Spring Cloud Function for Azure Function&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;conclusion&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#conclusion&quot; aria-label=&quot;conclusion permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Spring AI&apos;s support for OpenAI&apos;s Structured Outputs feature makes the AI-powered applications more reliable and easier to develop.
+By ensuring type safety and consistent, structured formatting, developers can focus on building innovative features rather than wrestling with unpredictable AI outputs.&lt;/p&gt;
+&lt;p&gt;We can highlight the following benefits for Spring Developers:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Seamless Integration&lt;/strong&gt;: Leverage Structured Outputs without leaving the Spring ecosystem.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Type Safety&lt;/strong&gt;: Work with strongly-typed Java objects, reducing runtime errors.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Flexibility&lt;/strong&gt;: Choose between programmatic and property-based configuration.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Domain-Driven Design&lt;/strong&gt;: Use your domain objects to define the expected AI output structure.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Please explore this new capability and share your experiences.
+As always, we welcome feedback and contributions to help improve Spring AI and make it even more powerful and user-friendly.&lt;/p&gt;
+&lt;p&gt;Stay tuned for more updates as we continue to enhance Spring AI&apos;s integration with cutting-edge AI technologies!&lt;/p&gt;</content:encoded></item><item><title><![CDATA[A Bootiful Podcast: Spring Cloud Dataflow, Spring Cloud Task, and Spring Batch legend Glenn Renfro]]></title><link>https://spring.io/blog/2024/08/08/a-bootiful-podcast-spring-cloud-dataflow-spring-cloud-task-and-spring-batch</link><guid isPermaLink="true">https://spring.io/blog/2024/08/08/a-bootiful-podcast-spring-cloud-dataflow-spring-cloud-task-and-spring-batch</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Thu, 08 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hi, Spring fans! In this installment, I talk to Spring Cloud Dataflow, Spring Cloud Task, and Spring Batch legend Glenn Renfro&lt;/p&gt;
+&lt;iframe title=&quot;Spring Cloud Dataflow, Spring Cloud Task, and Spring Batch legend Glenn Renfro&quot; allowtransparency=&quot;true&quot; height=&quot;150&quot; width=&quot;100%&quot; style=&quot;border: none; min-width: min(100%, 430px);height:150px;&quot; scrolling=&quot;no&quot; data-name=&quot;pb-iframe-player&quot; src=&quot;https://www.podbean.com/player-v2/?i=8her5-16961ee-pb&amp;from=pb6admin&amp;share=1&amp;download=1&amp;rtl=0&amp;fonts=Arial&amp;skin=1&amp;font-color=&amp;logo_link=episode_page&amp;btn-skin=7&quot; loading=&quot;lazy&quot;&gt;&lt;/iframe&gt;</content:encoded></item><item><title><![CDATA[Spring Tips: HTMX]]></title><link>https://spring.io/blog/2024/08/07/spring-tips-htmx</link><guid isPermaLink="true">https://spring.io/blog/2024/08/07/spring-tips-htmx</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Wed, 07 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hi, Spring fans! HTMX is the progressive hypertext sensation that&apos;s sweeping the process of web app creation, and - thanks to a &lt;a href=&quot;https://github.com/wimdeblauwe/htmx-spring-boot&quot;&gt;nice integration&lt;/a&gt; by Spring community legend &lt;a href=&quot;https://www.wimdeblauwe.com&quot;&gt;Wim Deblauwe&lt;/a&gt;, it&apos;s easier than ever to use it with Spring Boot and Thymeleaf. And, it&apos;s the topic of today&apos;s installment!&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/j-rfPoXe5aE?si=e96vpqzzxTGgmhY0&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; referrerpolicy=&quot;strict-origin-when-cross-origin&quot; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;#java #springboot #html #htmx #http #html5&lt;/p&gt;</content:encoded></item><item><title><![CDATA[This Week in Spring - August 6th, 2024 ]]></title><link>https://spring.io/blog/2024/08/07/this-week-in-spring-august-6th-2024</link><guid isPermaLink="true">https://spring.io/blog/2024/08/07/this-week-in-spring-august-6th-2024</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Wed, 07 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;It&apos;s &lt;em&gt;August&lt;/em&gt;! Egads, has that come quickly! AUGUST. The &lt;em&gt;eigth&lt;/em&gt; month of the year, and we&apos;re almost done with the first week, in fact! It&apos;s not that I&apos;m not grateful to be here, but, yah, wow that was quick. And, of course, the month of my all time double dutch favorite conference, SpringOne, &lt;a href=&quot;https://springone.io&quot;&gt;happening August 26th, 2024!&lt;/a&gt;  Will I see you there?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In last week&apos;s installment of &lt;em&gt;A Bootiful Podcast&lt;/em&gt;, I talk to Micrometer &lt;a href=&quot;https://spring.io/blog/2024/08/01/a-bootiful-podcast-observability-legend-jonatan-ivanov-on-the-latest-and&quot;&gt;teammate Jonatan Ivanov&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;In last week&apos;s installment of &lt;em&gt;Spring Tips&lt;/em&gt;, &lt;a href=&quot;https://spring.io/blog/2024/07/31/spring-tips-spring-security-method-security-with-special-guest-rob-winch&quot;&gt;I had special guest contributor and Spring Security lead Rob Winch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/07/31/spring-ai-with-groq-a-blazingly-fast-ai-inference-engine&quot;&gt;Spring AI with Groq - a blazingly fast AI inference engine&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;I &lt;em&gt;love&lt;/em&gt; this blog from the MongoDB developer blog called &lt;a href=&quot;https://www.mongodb.com/community/forums/t/discover-your-ideal-airbnb-implementing-a-spring-boot-atlas-search-with-kotlin-sync-driver/291414&quot;&gt;&lt;em&gt;Discover Your Ideal Airbnb: Implementing a Spring Boot &amp;#x26; Atlast Search with Kotlin Sync Driver&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://tanzu.vmware.com/content/blog/&quot;&gt;Spring AI enables quick delivery of Intelligent apps in java&lt;/a&gt;spring-ai-enables-quick-delivery-of-intelligent-apps-in-java&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.baeldung.com/spring-boot-return-errors-problemdetail&quot;&gt;Supporting &lt;code&gt;ProblemDetails&lt;/code&gt; in Spring&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://blog.samzhu.dev/2024/08/01/Step-by-Step-Guide-to-Integrating-Spring-Boot-with-OpenTelemetry-and-GCP/&quot;&gt;a nice step-by-step guide to GCP and Spring and OpenTelemetry&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.infoq.com/articles/config-maps-with-spring-boot/&quot;&gt;Optimizing Spring Boot Config Management with ConfigMaps: Environment Variables or Volume Mounts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.infoq.com/news/2024/08/spring-boot-3-3/&quot;&gt;Nice InfoQ article on the latest in Spring Boot 3.3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://azure.microsoft.com/en-us/resources/cloud-computing-dictionary/what-is-java-spring-boot/&quot;&gt;the Azure page for Spring Boot has been updated&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://lp.jetbrains.com/intellij-idea-spring/&quot;&gt;and so has the Jetbrains page for Spring Boot&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.geeksforgeeks.org/spring-boot-jparepository-with-example/&quot;&gt;the GeeksforGeeks blog has a nice post on using Spring Data&apos;s JpaRepository&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[A Bootiful Podcast: Observability legend Jonatan Ivanov on the latest and greatest in Micrometer]]></title><link>https://spring.io/blog/2024/08/01/a-bootiful-podcast-observability-legend-jonatan-ivanov-on-the-latest-and</link><guid isPermaLink="true">https://spring.io/blog/2024/08/01/a-bootiful-podcast-observability-legend-jonatan-ivanov-on-the-latest-and</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Thu, 01 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hi, Spring fans! In this installment we talk to observability legend Jonatan Ivanov about the latest and greatest in the wide and wonderful world of observability. (Turns out a library that&apos;s used by countless projects including and beyond the Spring ecosystem keeps quite busy!)&lt;/p&gt;
+&lt;iframe title=&quot;Observability legend Jonatan Ivanov on the latest and greatest in Micrometer&quot; allowtransparency=&quot;true&quot; height=&quot;150&quot; width=&quot;100%&quot; style=&quot;border: none; min-width: min(100%, 430px);height:150px;&quot; scrolling=&quot;no&quot; data-name=&quot;pb-iframe-player&quot; src=&quot;https://www.podbean.com/player-v2/?i=y8xd2-16888d0-pb&amp;from=pb6admin&amp;share=1&amp;download=1&amp;rtl=0&amp;fonts=Arial&amp;skin=1&amp;font-color=&amp;logo_link=episode_page&amp;btn-skin=7&quot; loading=&quot;lazy&quot;&gt;&lt;/iframe&gt;</content:encoded></item><item><title><![CDATA[Spring Tips: Spring Security method security with special guest Rob Winch]]></title><link>https://spring.io/blog/2024/07/31/spring-tips-spring-security-method-security-with-special-guest-rob-winch</link><guid isPermaLink="true">https://spring.io/blog/2024/07/31/spring-tips-spring-security-method-security-with-special-guest-rob-winch</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Wed, 31 Jul 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hi, Spring fans! In this installment I have special guest Spring Security lead Rob Winch give us a master class in how the method security support works and some of its new features. Come for the security, stay for the incredible opportunity to look over a senior engineer&apos;s shoulders as he explains the nuances of API design!&lt;/p&gt;
+&lt;p&gt;#springboot #springsecurity #springframework #java #security #apidevelopment #softwaredevelopment #architecture&lt;/p&gt;
+&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/JYZHp5eqS2I?si=aEgSG3I_SdxVA6kU&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&quot; referrerpolicy=&quot;strict-origin-when-cross-origin&quot; allowfullscreen&gt;&lt;/iframe&gt;</content:encoded></item><item><title><![CDATA[Spring AI with Groq - a blazingly fast AI inference engine]]></title><link>https://spring.io/blog/2024/07/31/spring-ai-with-groq-a-blazingly-fast-ai-inference-engine</link><guid isPermaLink="true">https://spring.io/blog/2024/07/31/spring-ai-with-groq-a-blazingly-fast-ai-inference-engine</guid><dc:creator><![CDATA[Christian Tzolov]]></dc:creator><pubDate>Wed, 31 Jul 2024 00:00:00 GMT</pubDate><content:encoded>&lt;blockquote&gt;
+&lt;p&gt;Faster information processing not only informs - it transforms how we perceive and innovate.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.spring.io/spring-ai/reference/&quot;&gt;Spring AI&lt;/a&gt;, a powerful framework for integrating AI capabilities into Spring applications, now offers support for &lt;a href=&quot;https://groq.com/&quot;&gt;Groq&lt;/a&gt; - a blazingly fast AI inference engine with support for Tool/Function calling.&lt;/p&gt;
+&lt;p&gt;Leveraging Groq&apos;s OpenAI-compatible API, Spring AI seamlessly integrates by adapting its existing &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html&quot;&gt;OpenAI Chat&lt;/a&gt; client.
+This approach enables developers to harness Groq&apos;s high-performance models through the familiar Spring AI API.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;//images.ctfassets.net/mnrwi97vnhts/1jCKEN83AUUV7AAQefxvlt/d74b870bae28ed447d8588eb178bfa79/spring-ai-groq-integration.jpg&quot; alt=&quot;spring-ai-groq-integration&quot;&gt;&lt;/p&gt;
+&lt;p&gt;We&apos;ll explore how to configure and use the Spring AI OpenAI chat client to connect with Groq.
+For detailed information, consult the Spring AI &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/groq-chat.html&quot;&gt;Groq documentation&lt;/a&gt; and related &lt;a href=&quot;https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/chat/GroqWithOpenAiChatModelIT.java&quot;&gt;tests&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;groq-api-key&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#groq-api-key&quot; aria-label=&quot;groq api key permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Groq API Key&lt;/h1&gt;
+&lt;p&gt;To interact with Groq, you&apos;ll need to obtain a Groq API key from &lt;a href=&quot;https://console.groq.com/keys&quot;&gt;https://console.groq.com/keys&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;dependencies&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#dependencies&quot; aria-label=&quot;dependencies permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Dependencies&lt;/h1&gt;
+&lt;p&gt;Add the Spring AI OpenAI starter to your project.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;#x3C;dependency&gt;
+  &amp;#x3C;groupId&gt;org.springframework.ai&amp;#x3C;/groupId&gt;
+  &amp;#x3C;artifactId&gt;spring-ai-openai-spring-boot-starter&amp;#x3C;/artifactId&gt;
+&amp;#x3C;/dependency&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For Gradle, add this to your &lt;code&gt;build.gradle&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dependencies {
+  implementation &apos;org.springframework.ai:spring-ai-openai-spring-boot-starter&apos;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ensure you&apos;ve added the Spring &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/getting-started.html#repositories&quot;&gt;Milestone and Snapshot repositories&lt;/a&gt; and add the &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management&quot;&gt;Spring AI BOM&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;configuring-spring-ai-for-groq&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#configuring-spring-ai-for-groq&quot; aria-label=&quot;configuring spring ai for groq permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Configuring Spring AI for Groq&lt;/h1&gt;
+&lt;p&gt;To use Groq with Spring AI, we need to configure the OpenAI client to point to Groq&apos;s API endpoint and use Groq-specific models.&lt;/p&gt;
+&lt;p&gt;Add the following environment variables to your project:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export SPRING_AI_OPENAI_API_KEY=&amp;#x3C;INSERT GROQ API KEY HERE&gt;  
+export SPRING_AI_OPENAI_BASE_URL=https://api.groq.com/openai  
+export SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL=llama3-70b-8192
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Alternatively, you can add these to your &lt;code&gt;application.properties&lt;/code&gt; file:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;spring.ai.openai.api-key=&amp;#x3C;GROQ_API_KEY&gt;
+spring.ai.openai.base-url=https://api.groq.com/openai
+spring.ai.openai.chat.options.model=llama3-70b-8192
+spring.ai.openai.chat.options.temperature=0.7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Key points:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;code&gt;api-key&lt;/code&gt; is set to one of your &lt;a href=&quot;https://console.groq.com/keys&quot;&gt;Groq keys&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;base-url&lt;/code&gt; is set to Groq&apos;s API endpoint: &lt;code&gt;https://api.groq.com/openai&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;model&lt;/code&gt; is set to one of Groq&apos;s available &lt;a href=&quot;https://console.groq.com/docs/models&quot;&gt;Models&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For the complete list of configuration properties, consult the &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/groq-chat.html#_chat_properties&quot;&gt;Groq chat properties&lt;/a&gt; documentation.&lt;/p&gt;
+&lt;h1 id=&quot;code-example&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#code-example&quot; aria-label=&quot;code example permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Code Example&lt;/h1&gt;
+&lt;p&gt;Now that we&apos;ve configured Spring AI to use Groq, let&apos;s look at a simple example of how to use it in your application.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@RestController
+public class ChatController {
+
+  private final ChatClient chatClient;
+
+  @Autowired
+  public ChatController(ChatClient.Builder builder) {
+      this.chatClient = builder.build();
+  }
+
+  @GetMapping(&quot;/ai/generate&quot;)
+  public Map generate(@RequestParam(value = &quot;message&quot;, defaultValue = &quot;Tell me a joke&quot;) String message) {
+     String response = chatClient.prompt().user(message).call().content();
+     return Map.of(&quot;generation&quot;, response);
+  }
+
+  @GetMapping(&quot;/ai/generateStream&quot;)
+  public Flux&amp;#x3C;String&gt; generateStream(@RequestParam(value = &quot;message&quot;, 
+        defaultValue = &quot;Tell me a joke&quot;) String message) {
+      return chatClient.prompt().user(message).stream().content();
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this example, we&apos;ve created a simple REST controller with two endpoints:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/ai/generate&lt;/code&gt;: Generates a single response to a given prompt.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/ai/generateStream&lt;/code&gt;: Streams the response, which can be useful for longer outputs or real-time interactions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;toolsfunctions&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#toolsfunctions&quot; aria-label=&quot;toolsfunctions permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Tools/Functions&lt;/h1&gt;
+&lt;p&gt;Groq API endpoints support &lt;a href=&quot;https://console.groq.com/docs/tool-use&quot;&gt;tool/function calling&lt;/a&gt; when selecting one of the Tool/Function supporting models.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;//images.ctfassets.net/mnrwi97vnhts/3HRxhPSz4Evjks85ayzOEV/22106b2e2dce21ae930b29f5d34d8704/spring-ai-groq-functions-2.jpg&quot; alt=&quot;spring-ai-groq-functions-2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;You can register custom Java functions with your ChatModel and have the provided Groq model intelligently choose to output a JSON object containing arguments to call one or many of the registered functions.
+This is a powerful technique to connect the LLM capabilities with external tools and APIs.&lt;/p&gt;
+&lt;h3 id=&quot;tool-example&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#tool-example&quot; aria-label=&quot;tool example permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Tool Example&lt;/h3&gt;
+&lt;p&gt;Here&apos;s a simple example of how to use Groq function calling with Spring AI:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@SpringBootApplication
+public class GroqApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GroqApplication.class, args);
+	}
+
+	@Bean
+	CommandLineRunner runner(ChatClient.Builder chatClientBuilder) {
+		return args -&gt; {
+			var chatClient = chatClientBuilder.build();
+
+			var response = chatClient.prompt()
+				.user(&quot;What is the weather in Amsterdam and Paris?&quot;)
+				.functions(&quot;weatherFunction&quot;) // reference by bean name.
+				.call()
+				.content();
+
+			System.out.println(response);
+		};
+	}
+
+	@Bean
+	@Description(&quot;Get the weather in location&quot;)
+	public Function&amp;#x3C;WeatherRequest, WeatherResponse&gt; weatherFunction() {
+		return new MockWeatherService();
+	}
+
+	public static class MockWeatherService implements Function&amp;#x3C;WeatherRequest, WeatherResponse&gt; {
+
+		public record WeatherRequest(String location, String unit) {}
+		public record WeatherResponse(double temp, String unit) {}
+
+		@Override
+		public WeatherResponse apply(WeatherRequest request) {
+			double temperature = request.location().contains(&quot;Amsterdam&quot;) ? 20 : 25;
+			return new WeatherResponse(temperature, request.unit);
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this example, when the model needs weather information, it will automatically call the &lt;code&gt;weatherFunction&lt;/code&gt; bean, which can then fetch real-time weather data.&lt;/p&gt;
+&lt;p&gt;The expected response looks like this: &quot;The weather in Amsterdam is currently 20 degrees Celsius, and the weather in Paris is currently 25 degrees Celsius.&quot;&lt;/p&gt;
+&lt;p&gt;Read more about OpenAI &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/functions/openai-chat-functions.html&quot;&gt;Function Calling&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&quot;key-considerations&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#key-considerations&quot; aria-label=&quot;key considerations permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Key Considerations&lt;/h1&gt;
+&lt;p&gt;When using Groq with Spring AI, keep the following points in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tool/Function Calling: Groq &lt;a href=&quot;https://console.groq.com/docs/tool-use&quot;&gt;supports&lt;/a&gt; Tool/Function calling. Check for the recommended models to use.&lt;/li&gt;
+&lt;li&gt;API Compatibility: The Groq API is not fully compatible with the OpenAI API. Be aware of potential differences in behavior or features.&lt;/li&gt;
+&lt;li&gt;Model Selection: Ensure you&apos;re using one of the Groq-specific &lt;a href=&quot;https://console.groq.com/docs/models&quot;&gt;models&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Multimodal Limitations: Currently, Groq doesn&apos;t support multimodal messages.&lt;/li&gt;
+&lt;li&gt;Performance: Groq is known for its fast inference times. You may notice improved response speeds compared to other providers, especially for larger models.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;conclusion&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#conclusion&quot; aria-label=&quot;conclusion permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Integrating Groq with Spring AI opens up new possibilities for developers looking to leverage high-performance AI models in their Spring applications.
+By repurposing the OpenAI client, Spring AI makes it straightforward to switch between different AI providers, allowing you to choose the best solution for your specific needs.&lt;/p&gt;
+&lt;p&gt;As you explore this integration, remember to stay updated with the latest documentation from both &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/index.html&quot;&gt;Spring AI&lt;/a&gt; and &lt;a href=&quot;https://console.groq.com/docs/quickstart&quot;&gt;Groq&lt;/a&gt;, as features and compatibility may evolve over time.&lt;/p&gt;
+&lt;p&gt;We encourage you to experiment with different Groq models and compare their performance and outputs to find the best fit for your use case.&lt;/p&gt;
+&lt;p&gt;Happy coding, and enjoy the speed and capabilities that Groq brings to your AI-powered Spring applications!&lt;/p&gt;</content:encoded></item><item><title><![CDATA[This Week in Spring - July 29th, 2024]]></title><link>https://spring.io/blog/2024/07/29/this-week-in-spring-july-29th-2024</link><guid isPermaLink="true">https://spring.io/blog/2024/07/29/this-week-in-spring-july-29th-2024</guid><dc:creator><![CDATA[Josh Long]]></dc:creator><pubDate>Tue, 30 Jul 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Hi Spring fans! Welcome to another installment of &lt;em&gt;This Week in Spring&lt;/em&gt;! It&apos;s July 29th, 2024! I can hardly believe it! We&apos;re less than a month away from SpringOne 2024! &lt;a href=&quot;https://springone.io&quot;&gt;Have you registered for either in-person attendance or the free livestreams yet&lt;/a&gt;?  As always, we&apos;ve got a ton of stuff to cover so let&apos;s dive right into it!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;first, Ollama just announced support for tools, and &lt;a href=&quot;https://spring.io/blog/2024/07/26/spring-ai-with-ollama-tool-support&quot;&gt;that&apos;s now supported in Spring AI!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;In last week&apos;s installment of &lt;em&gt;A Bootiful Podcast&lt;/em&gt;, I talked to cloud infrastructure legend &lt;a href=&quot;https://spring.io/blog/2024/07/25/a-bootiful-podcast-cloud-legend-mark-fynes&quot;&gt;Mark Fynes about Cloud Foundry, Kubernetes, continuous delivery&lt;/a&gt;, and so much more.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://spring.io/blog/2024/07/24/spring-cloud-data-flow-2-11-4-released&quot;&gt;Spring Cloud Data Flow 2.11.4 Released&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.google.com/url?sa=t&amp;#x26;source=web&amp;#x26;rct=j&amp;#x26;opi=89978449&amp;#x26;url=https://maciejwalkowiak.com/blog/spring-boot-openapi-generate-client/&amp;#x26;ved=2ahUKEwiwpLGSkM2HAxUtFzQIHRNbAWYQFnoECCAQAQ&amp;#x26;usg=AOvVaw36N7Yqgipu6gg7UhGa-CSJ&quot;&gt;Generating HTTP clients from a Spring Boot application&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://bootify.medium.com/the-spring-initializr-alternative-for-starting-complex-spring-boot-apps-9e8d78d5fec4&quot;&gt;Seems interesting.. will have to check it out&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.google.com/url?sa=t&amp;#x26;source=web&amp;#x26;rct=j&amp;#x26;opi=89978449&amp;#x26;url=https://medium.com/codex/implementing-the-strategy-design-pattern-in-spring-boot-df3adb9ceb4a&amp;#x26;ved=2ahUKEwj4uNenkM2HAxWFFTQIHU6AHy04ChAWegQIGhAB&amp;#x26;usg=AOvVaw2gABt1PCjpYoVgnzOB3krs&quot;&gt;Implementing the strategy design pattern in Spring Boot&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=5qG9Yi3bHd8&quot;&gt;From Prompts to Reality: Exploring Multimodal AI with Spring AI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=MhTLCfJFN9Q&quot;&gt;how to integrate open source models with Ollama (and Spring AI)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=QnBeGrtclP0&quot;&gt;A nice Italian language introduction to Spring AI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://howtodoinjava.com/series/spring-ai-tutorial/&quot;&gt;this looks promising: a Spring AI tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Spring AI with Ollama Tool Support]]></title><link>https://spring.io/blog/2024/07/26/spring-ai-with-ollama-tool-support</link><guid isPermaLink="true">https://spring.io/blog/2024/07/26/spring-ai-with-ollama-tool-support</guid><dc:creator><![CDATA[Christian Tzolov]]></dc:creator><pubDate>Fri, 26 Jul 2024 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Earlier this week, Ollama &lt;a href=&quot;https://ollama.com/blog/tool-support&quot;&gt;introduced&lt;/a&gt; an exciting new feature: tool support for Large Language Models (LLMs).&lt;/p&gt;
+&lt;p&gt;Today, we&apos;re thrilled to announce that &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/ollama-chat.html#_function_calling&quot;&gt;Spring AI&lt;/a&gt; (1.0.0-SNAPSHOT) has fully embraced this powerful feature, bringing Ollama&apos;s function calling capabilities to the Spring ecosystem.&lt;/p&gt;
+&lt;p&gt;Ollama&apos;s tool support allows models to make decisions about when to call external functions and how to use the returned data. This opens up a world of possibilities, from accessing real-time information to performing complex calculations. Spring AI takes this concept and integrates it seamlessly with the Spring ecosystem, making it incredibly easy for Java developers to leverage this functionality in their applications. Key Features of Spring AI&apos;s Ollama Function Calling Support includes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Easy Integration: Register your Java functions as Spring beans and use them with Ollama models.&lt;/li&gt;
+&lt;li&gt;Flexible Configuration: Multiple ways to register and configure functions.&lt;/li&gt;
+&lt;li&gt;Automatic JSON Schema Generation: Spring AI handles the conversion of your Java methods into JSON schemas that Ollama can understand.&lt;/li&gt;
+&lt;li&gt;Support for Multiple Functions: Register and use multiple functions in a single chat session.&lt;/li&gt;
+&lt;li&gt;Runtime Function Selection: Dynamically choose which functions to enable for each prompt.&lt;/li&gt;
+&lt;li&gt;Code Portability: Reuse your application code without changes with  different LLM providers such as OpenAI, Mistral, VertexAI, Anthropic, Groq without code changes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;how-it-works&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#how-it-works&quot; aria-label=&quot;how it works permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;How It Works&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Define custom Java functions and register them with Spring AI.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;//images.ctfassets.net/mnrwi97vnhts/3Q5FXZrrY37SmOkOqyc7r6/1f47075ab3df565fd6402473a2514045/Restored_Spring_AI__1_.jpg&quot; alt=&quot;Restored Spring AI (1)&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Perform chat request that might need function calling to complete the answer.&lt;/li&gt;
+&lt;li&gt;When the AI model determines it needs to call a function, it generates a JSON object with the function name and arguments.&lt;/li&gt;
+&lt;li&gt;Spring AI intercepts this request, calls your Java function, and returns the result to the model.&lt;/li&gt;
+&lt;li&gt;The model incorporates the function&apos;s output into its response.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;getting-started&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#getting-started&quot; aria-label=&quot;getting started permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Getting Started&lt;/h1&gt;
+&lt;h4 id=&quot;prerequisite&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#prerequisite&quot; aria-label=&quot;prerequisite permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Prerequisite&lt;/h4&gt;
+&lt;p&gt;You first need to run Ollama (&lt;code&gt;0.2.8+&lt;/code&gt;) on your local machine. Refer to the official Ollama project &lt;a href=&quot;https://github.com/ollama/ollama&quot;&gt;README&lt;/a&gt; to get started running models on your local machine.
+Then pull a tools supporting model such as &lt;code&gt;Llama 3.1&lt;/code&gt;, &lt;code&gt;Mistral&lt;/code&gt;, &lt;code&gt;Firefunction v2&lt;/code&gt;, &lt;code&gt;Command-R +&lt;/code&gt;...
+A list of supported models can be found under the &lt;a href=&quot;https://ollama.com/search?c=tools&quot;&gt;Tools category on the models page&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ollama run mistral
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;dependencies&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#dependencies&quot; aria-label=&quot;dependencies permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Dependencies&lt;/h4&gt;
+&lt;p&gt;To start using Ollama function calling with Spring AI, add the following dependency to your project:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;#x3C;dependency&gt;
+  &amp;#x3C;groupId&gt;org.springframework.ai&amp;#x3C;/groupId&gt;
+  &amp;#x3C;artifactId&gt;spring-ai-ollama-spring-boot-starter&amp;#x3C;/artifactId&gt;
+&amp;#x3C;/dependency&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Refer to the &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/getting-started.html#dependency-management&quot;&gt;Dependency Management&lt;/a&gt; section to add the Spring AI BOM to your build file.&lt;/p&gt;
+&lt;h4 id=&quot;example&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#example&quot; aria-label=&quot;example permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Example&lt;/h4&gt;
+&lt;p&gt;Here&apos;s a simple example of how to use Ollama function calling with Spring AI:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@SpringBootApplication
+public class OllamaApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(OllamaApplication.class, args);
+	}
+
+	@Bean
+	CommandLineRunner runner(ChatClient.Builder chatClientBuilder) {
+		return args -&gt; {
+			var chatClient = chatClientBuilder.build();
+
+			var response = chatClient.prompt()
+				.user(&quot;What is the weather in Amsterdam and Paris?&quot;)
+				.functions(&quot;weatherFunction&quot;) // reference by bean name.
+				.call()
+				.content();
+
+			System.out.println(response);
+		};
+	}
+
+	@Bean
+	@Description(&quot;Get the weather in location&quot;)
+	public Function&amp;#x3C;WeatherRequest, WeatherResponse&gt; weatherFunction() {
+		return new MockWeatherService();
+	}
+
+	public static class MockWeatherService implements Function&amp;#x3C;WeatherRequest, WeatherResponse&gt; {
+
+		public record WeatherRequest(String location, String unit) {}
+		public record WeatherResponse(double temp, String unit) {}
+
+		@Override
+		public WeatherResponse apply(WeatherRequest request) {
+			double temperature = request.location().contains(&quot;Amsterdam&quot;) ? 20 : 25;
+			return new WeatherResponse(temperature, request.unit);
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this example, when the model needs weather information, it will automatically call the &lt;code&gt;weatherFunction&lt;/code&gt; bean, which can then fetch real-time weather data.&lt;/p&gt;
+&lt;p&gt;The expected response looks like this: &quot;&lt;em&gt;The weather in Amsterdam is currently 20 degrees Celsius, and the weather in Paris is currently 25 degrees Celsius.&lt;/em&gt;&quot;&lt;/p&gt;
+&lt;p&gt;The full example code is available at: &lt;a href=&quot;https://github.com/tzolov/ollama-tools&quot;&gt;https://github.com/tzolov/ollama-tools&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;openai-compatibility&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#openai-compatibility&quot; aria-label=&quot;openai compatibility permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;OpenAI Compatibility&lt;/h4&gt;
+&lt;p&gt;Ollama is OpenAI API compatible and you can use the &lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/openai-chat.html&quot;&gt;Spring AI OpenAI&lt;/a&gt; client to talk to Ollama and use tools.
+For this you need to use the OpenAI client but set the base-url:  &lt;code&gt;spring.ai.openai.chat.base-url=http://localhost:11434&lt;/code&gt; and select one of the provided Ollama Tools models: &lt;code&gt;spring.ai.openai.chat.options.model=mistral&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Check the &lt;a href=&quot;https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-openai/src/test/java/org/springframework/ai/openai/chat/OllamaWithOpenAiChatModelIT.java&quot;&gt;OllamaWithOpenAiChatModelIT.java&lt;/a&gt; tests for examples of using Ollama over Spring AI OpenAI.&lt;/p&gt;
+&lt;h4 id=&quot;limitations&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#limitations&quot; aria-label=&quot;limitations permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Limitations&lt;/h4&gt;
+&lt;p&gt;As stated in the Ollama &lt;a href=&quot;https://ollama.com/blog/tool-support&quot;&gt;blog post&lt;/a&gt;, currently their API does not support &lt;code&gt;Streaming Tool Calls&lt;/code&gt; nor &lt;code&gt;Tool choice&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Once those limitations are resolved, Spring AI is ready to provide support for them as well.&lt;/p&gt;
+&lt;h1 id=&quot;further-information&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#further-information&quot; aria-label=&quot;further information permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Further Information&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.spring.io/spring-ai/reference/index.html&quot;&gt;Spring AI Reference Doc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.spring.io/spring-ai/reference/api/chat/ollama-chat.html&quot;&gt;Spring AI Ollama Integration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Related tests: &lt;a href=&quot;https://github.com/spring-projects/spring-ai/blob/main/models/spring-ai-ollama/src/test/java/org/springframework/ai/ollama/OllamaChatModelFunctionCallingIT.java&quot;&gt;OllamaChatModelFunctionCallingIT&lt;/a&gt; , &lt;a href=&quot;https://github.com/spring-projects/spring-ai/blob/main/spring-ai-spring-boot-autoconfigure/src/test/java/org/springframework/ai/autoconfigure/ollama/tool/FunctionCallbackWrapperIT.java&quot;&gt;FunctionCallbackWrapperIT&lt;/a&gt;, &lt;a href=&quot;https://github.com/spring-projects/spring-ai/blob/main/spring-ai-spring-boot-autoconfigure/src/test/java/org/springframework/ai/autoconfigure/ollama/tool/FunctionCallbackInPromptIT.java&quot;&gt;FunctionCallbackInPromptIT&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;conclusion&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#conclusion&quot; aria-label=&quot;conclusion permalink&quot; class=&quot;anchor before&quot;&gt;&lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;By building on Ollama&apos;s innovative tool support and integrating it into the Spring ecosystem, Spring AI has created a powerful new way for Java developers to create AI-enhanced applications. This feature opens up exciting possibilities for creating more dynamic and responsive AI-powered systems that can interact with real-world data and services.&lt;/p&gt;
+&lt;p&gt;Some benefits of using Spring AI&apos;s Ollama Function Calling include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Extend AI Capabilities: Easily augment AI models with custom functionality and real-time data.&lt;/li&gt;
+&lt;li&gt;Seamless Integration: Leverage existing Spring beans and infrastructure in your AI applications.&lt;/li&gt;
+&lt;li&gt;Type-Safe Development: Use strongly-typed Java functions instead of dealing with raw JSON.&lt;/li&gt;
+&lt;li&gt;Reduced Boilerplate: Spring AI handles the complexities of function calling, allowing you to focus on your business logic.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We encourage you to try out this new feature and let us know how you&apos;re using it in your projects. For more detailed information and advanced usage, check out our official documentation.&lt;/p&gt;
+&lt;p&gt;Happy coding with Spring AI and Ollama!&lt;/p&gt;</content:encoded></item></channel></rss>
