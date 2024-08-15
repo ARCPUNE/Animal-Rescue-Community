@@ -37,7 +37,7 @@ public class AnimalsController {
 		return ResponseEntity.status(HttpStatus.OK).body(animalService.getAllAnimals());
 	}
 	
-	@GetMapping("/pet/{pet}")
+	@GetMapping("/category/{pet}")
 	public ResponseEntity<?> getPetByType(@PathVariable Category pet) {
 		return ResponseEntity.status(HttpStatus.OK).body(animalService.getPetByType(pet));
 	}

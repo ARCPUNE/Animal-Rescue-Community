@@ -2,6 +2,7 @@ package com.arc.security;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -54,8 +55,9 @@ public class OAuth2SuccessHandler extends SavedRequestAwareAuthenticationSuccess
 		User user = userRepository.findByEmail(email).orElseThrow();
 
 		String token = jwtService.generateToken(user);
+		String refreshToken = jwtService.generateRefreshToken(new HashMap<String, Object>() , user);
 
-		response.sendRedirect(frontendURL + "/home?token=" + token);
+		response.sendRedirect(frontendURL + "/home?token=" + token+ "&refreshToken=" + refreshToken);
 
 		super.onAuthenticationSuccess(request, response, authentication);
 	}

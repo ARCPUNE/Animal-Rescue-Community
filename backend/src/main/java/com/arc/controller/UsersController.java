@@ -3,6 +3,7 @@ package com.arc.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class UsersController {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(token));
 	}
 	
+	@PreAuthorize("permitAll()")
 	@PostMapping
 	public ResponseEntity<?> addNewUser(@Valid @RequestBody UserDTO userDTO) {
 		return ResponseEntity.status(HttpStatus.OK).body(userService.addNewUser(userDTO)); 

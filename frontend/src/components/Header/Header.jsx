@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logOut } from "../../Features/userSlice";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { clearTokens } from "../../Features/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const user = useSelector(selectUser); // Access user state from Redux
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logOut()); // Dispatch the logout action
-    localStorage.removeItem("user");
+    dispatch(clearTokens());
+    navigate("/login");
   };
 
   const toggleMobileMenu = () => {
@@ -118,7 +122,7 @@ export default function Header() {
         <div className="flex items-center space-x-4 lg:order-2">
           {user ? (
             <div className="flex items-center space-x-4">
-              <span className="text-gray-800 text-sm sm:text-base">Welcome, User</span>
+              <span className="text-gray-800 text-sm sm:text-base">Welcome, {user.name}</span>
               <Link
                 to="/profile"
                 className="px-3 py-1 text-xs sm:text-sm lg:text-base font-medium text-gray-800 duration-200 bg-gray-50 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-300"
