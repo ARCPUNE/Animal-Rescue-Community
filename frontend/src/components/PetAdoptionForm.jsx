@@ -247,7 +247,7 @@ const PetAdoptionForm = () => {
           </button>
         </div>
       </div>
-    </div>x
+    </div>
   );
 };
 
