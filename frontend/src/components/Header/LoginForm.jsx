@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { login } from "../../Features/userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -6,51 +9,57 @@ function LoginForm() {
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
 
-  // Validate form inputs
-  const validate = () => {
-    let formErrors = {};
+  const navigate = useNavigate();
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.match(emailPattern) || !email.endsWith('.com')) {
-      formErrors.email = "Please enter a valid email address.";
-    }
+  const dispatch = useDispatch();
 
-    if (password.length < 6) {
-      formErrors.password = "Password must be at least 6 characters long.";
-    }
 
-    setErrors(formErrors);
-    return Object.keys(formErrors).length === 0;
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      try {
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
 
-        if (response.ok) {
-          const result = await response.json();
-          setEmail("");
-          setPassword("");
-          setApiError("");
-          console.log("Login successful:", result);
-          // Handle successful login (e.g., redirect user)
-        } else {
-          const errorData = await response.json();
-          setApiError(errorData.message || "Login failed. Please try again.");
-        }
-      } catch (error) {
-        setApiError("An error occurred. Please try again.");
-      }
+    let formErrors = {};
+
+    // Validate email
+    if (!validateEmail(email)) {
+      formErrors.email = "Please enter a valid email address.";
     }
+
+    // Validate password
+    if (!password) {
+      formErrors.password = "Password is required.";
+    }
+
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    // Dispatch the login action
+    dispatch(
+      login({
+        email: email,
+        password: password,
+        loggedIn: true,
+      })
+    );
+
+    // Store user data in local storage
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        email: email,
+        password: password,
+        loggedIn: true,
+      })
+    );
+
+    navigate(`/`);
   };
 
   return (
@@ -61,7 +70,7 @@ function LoginForm() {
         loop
         muted
       >
-        <source src='./HomeImages/background.mp4' type="video/mp4" />
+        <source src="./HomeImages/background.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
@@ -71,7 +80,7 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+              <label htmlFor="email" className=" block text-gray-700 font-bold mb-2">
                 Email/Mobile No.
               </label>
               <input

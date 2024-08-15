@@ -1,34 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import PetCard from '../petCard';
 
-const CatListing = () => {
+const DogListing = () => {
   const [petData, setPetData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(true); // Set to false to see the non-admin view
   const navigate = useNavigate();
 
   useEffect(() => {
     // Replace with your actual API endpoint
-    fetch('https://api.example.com/adoptDogs')
-      .then((response) => response.json())
-      .then((data) => setPetData(data))
-      .catch((error) => console.error('Error fetching pet data:', error));
+    axios.get('https://api.example.com/adoptDogs')
+      .then((response) => {
+        setPetData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching pet data:', error);
+      });
   }, []);
 
   // Handler function to delete a pet
   const handleDelete = (petId) => {
-    fetch(`adoptDogs/${petId}`, {
-      method: 'DELETE',
-    })
+    axios.delete(`https://api.example.com/adoptDogs/${petId}`)
       .then((response) => {
-        if (response.ok) {
+        if (response.status === 200) {
           setPetData(petData.filter(pet => pet.id !== petId));
           console.log(`Deleted pet with id ${petId}`);
         } else {
           console.error('Failed to delete pet');
         }
       })
-      .catch((error) => console.error('Error deleting pet:', error));
+      .catch((error) => {
+        console.error('Error deleting pet:', error);
+      });
   };
 
   // Handler function to navigate to the adoptCats/id page
@@ -61,4 +65,4 @@ const CatListing = () => {
   );
 };
 
-export default CatListing;
+export default DogListing;

@@ -1,6 +1,6 @@
 package com.arc.dto;
 
-import com.arc.entities.Animal.Category;
+import com.arc.entities.Category;
 import com.arc.entities.Animal.Gender;
 import com.arc.entities.Animal.Status;
 

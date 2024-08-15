@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.AnimalDTO;
+import com.arc.entities.Category;
 import com.arc.service.AnimalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,6 +35,11 @@ public class AnimalsController {
 	@GetMapping
 	public ResponseEntity<?> getAllAnimals() {
 		return ResponseEntity.status(HttpStatus.OK).body(animalService.getAllAnimals());
+	}
+	
+	@GetMapping("/pet/{pet}")
+	public ResponseEntity<?> getPetByType(@PathVariable Category pet) {
+		return ResponseEntity.status(HttpStatus.OK).body(animalService.getPetByType(pet));
 	}
 
 	@GetMapping("/{id}")

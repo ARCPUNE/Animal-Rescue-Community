@@ -56,10 +56,6 @@ public class Animal {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    public enum Category {
-        CAT, DOG, OTHER
-    }
-
     public enum Gender {
         MALE, FEMALE
     }
