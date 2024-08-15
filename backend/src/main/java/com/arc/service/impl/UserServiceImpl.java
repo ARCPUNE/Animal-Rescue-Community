@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.arc.dto.UserDTO;
+import com.arc.entities.Role;
 import com.arc.entities.User;
 import com.arc.exception.UserAlreadyExistsException;
 import com.arc.exception.UserNotFoundException;
@@ -75,6 +76,7 @@ public class UserServiceImpl implements UserService {
 
 		String pass = encoder.encode(userDTO.getPassword());
 		userDTO.setPassword(pass);
+		userDTO.setRole(Role.ROLE_Volunteer);
 
 		return mapper.map(userRepository.save(mapper.map(userDTO, User.class) // Map userDTO to user and save it in DB
 		), UserDTO.class); // map the saved user entity to userDTO and return it

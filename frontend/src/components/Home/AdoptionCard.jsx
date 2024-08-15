@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const AdoptionCard = ({ image, title }) => {
   const [link, setLink] = useState("/");
@@ -32,6 +33,11 @@ const AdoptionCard = ({ image, title }) => {
       </div>
     </div>
   );
+};
+
+AdoptionCard.propTypes = {
+  image: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default AdoptionCard;

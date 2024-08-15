@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    user: window.localStorage.getItem('user'),
+    user: null,
   },
 
   reducers: {

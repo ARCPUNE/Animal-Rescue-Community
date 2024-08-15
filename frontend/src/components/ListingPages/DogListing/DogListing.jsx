@@ -1,37 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import PetCard from '../petCard';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../../AxiosInstance";
+import PetCard from "../petCard";
+import { selectUser } from "../../../Features/userSlice";
+import { useSelector } from "react-redux";
 
 const DogListing = () => {
   const [petData, setPetData] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(true); // Set to false to see the non-admin view
+  const user = useSelector(selectUser);
+  const [isAdmin] = useState(() => user?.role === "ROLE_Admin" || false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Replace with your actual API endpoint
-    axios.get('https://api.example.com/adoptDogs')
+    axiosInstance
+      .get("/api/animals/category/DOG")
       .then((response) => {
         setPetData(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching pet data:', error);
+        console.error("Error fetching pet data:", error);
       });
   }, []);
 
   // Handler function to delete a pet
   const handleDelete = (petId) => {
-    axios.delete(`https://api.example.com/adoptDogs/${petId}`)
+    axiosInstance
+      .delete(`/api/animals/${petId}`)
       .then((response) => {
         if (response.status === 200) {
-          setPetData(petData.filter(pet => pet.id !== petId));
+          setPetData(petData.filter((pet) => pet.id !== petId));
           console.log(`Deleted pet with id ${petId}`);
         } else {
-          console.error('Failed to delete pet');
+          console.error("Failed to delete pet");
         }
       })
       .catch((error) => {
-        console.error('Error deleting pet:', error);
+        console.error("Error deleting pet:", error);
       });
   };
 
@@ -42,11 +46,17 @@ const DogListing = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Adopt! Don't Shop!</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">
+        Adopt! Don&apos;t Shop!
+      </h1>
       <div className="ml-12 mr-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {petData.map((pet) => (
-          <div key={pet.id} className="relative" onClick={() => handleViewDetails(pet.id)}>
-            <PetCard petId={pet.id} />
+          <div
+            key={pet.id}
+            className="relative"
+            onClick={() => handleViewDetails(pet.id)}
+          >
+            <PetCard pet={pet} />
             {isAdmin && (
               <button
                 onClick={(e) => {
