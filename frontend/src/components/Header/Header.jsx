@@ -19,21 +19,7 @@ export default function Header() {
   };
 
   return (
-<<<<<<< HEAD
-    <header className="relative w-full">
-      <nav className="bg-yellow-50 border-r-gray-400 px-4 lg:px-6 py-2.5">
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <Link to="/" className="flex items-center">
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <img
-                  src="./HeaderImages/arc_logo.png"
-                  className="w-20 h-auto max-h-20 border-8 border-yellow-50 rounded-full object-contain"
-                  alt="Logo"
-                />
-              </div>
-=======
-    <header className="relative w-full bg-yellow-50 border-b border-gray-400">
+    <header className="relative w-full border-b border-gray-400">
       <nav className="flex flex-wrap items-center justify-between px-4 py-4 mx-auto max-w-screen-xl lg:px-6">
         <Link to="/" className="flex items-center">
           <img
@@ -45,7 +31,6 @@ export default function Header() {
             Animal Rescue Community
           </span>
         </Link>
->>>>>>> main
 
         <div className="lg:hidden">
           <button
@@ -152,7 +137,7 @@ export default function Header() {
             <>
               <Link
                 to="/login"
-                className="px-3 py-1 text-xs sm:text-sm lg:text-base font-medium text-gray-800 duration-200 bg-gray-50 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-300"
+                className="px-3 py-1 text-xs sm:text-sm lg:text-base font-medium text-gray-800 duration-200 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-300"
                 onClick={toggleMobileMenu}
               >
                 Log in
