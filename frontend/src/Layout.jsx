@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import store from './Store/Store';
 
 function Layout() {
+  
   return (
     <div className='w-auto h-auto'>
 <Provider store= {store}>
