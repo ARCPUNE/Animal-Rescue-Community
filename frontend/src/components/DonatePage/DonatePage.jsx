@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const DonatePage = () => {
   const [userInput, setUserInput] = useState({
@@ -7,12 +8,24 @@ const DonatePage = () => {
     enteredphone: '',
   });
 
-  const [donors, setDonors] = useState([
-    { name: "John Doe", amount: "₹500", phone: 123456789 },
-    { name: "Jane Smith", amount: "₹100", phone: 123456789 },
-    { name: "Bob Johnson", amount: "₹1000", phone: 123456789 },
-    { name: "Sarah Lee", amount: "₹50", phone: 123456789 }
-  ]);
+  const [donors, setDonors] = useState([]);
+  const [apiError, setApiError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Fetch initial list of donors from the database
+    const fetchDonors = async () => {
+      try {
+        const response = await axios.get('https://api.example.com/donors');
+        setDonors(response.data);
+      } catch (error) {
+        console.error('Error fetching donors:', error);
+        setApiError('Failed to fetch donors. Please try again.');
+      }
+    };
+
+    fetchDonors();
+  }, []);
 
   const nameChangeHandler = (event) => {
     setUserInput((prevState) => ({
@@ -35,30 +48,50 @@ const DonatePage = () => {
     }));
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
-    let DonateData = {
+    const DonateData = {
       name: userInput.enteredname,
       amount: userInput.enteredAmount,
       phone: userInput.enteredphone,
     };
 
-    setDonors((prevDonors) => [...prevDonors, DonateData]);
-    console.log(DonateData);
+    setIsSubmitting(true);
 
-    setUserInput({
-        enteredname: '',
-        enteredAmount: '',
-        enteredphone: '',
-    })
+    try {
+      // Post new donation to the database
+      const response = await axios.post('https://api.example.com/donors', DonateData);
+
+      if (response.status === 201) {
+        // Fetch updated list of donors after successful addition
+        const updatedResponse = await axios.get('https://api.example.com/donors');
+        setDonors(updatedResponse.data);
+
+        // Clear form
+        setUserInput({
+          enteredname: '',
+          enteredAmount: '',
+          enteredphone: '',
+        });
+
+        setApiError('');
+      } else {
+        setApiError('Failed to submit donation. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting donation:', error);
+      setApiError('An error occurred while submitting your donation. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div>
       <div className="text-black font-bold text-4xl text-center mb-4 mt-8">
         Support Our Cause{" "}
-        <img src="./HomeImages/Heart.svg" className="size-14 inline-flex" alt="Heart Icon"></img>{" "}
+        <img src="./HomeImages/Heart.svg" className="size-14 inline-flex" alt="Heart Icon" />
       </div>
       <div className="text-gray-600 text-center mt-2 text-xl mr-12">
         Your donation can make a real difference
@@ -77,7 +110,7 @@ const DonatePage = () => {
             <form className="space-y-4" onSubmit={submitHandler}>
               <input
                 required
-                type="text" 
+                type="text"
                 value={userInput.enteredname}
                 onChange={nameChangeHandler}
                 placeholder="Please enter your name"
@@ -85,7 +118,7 @@ const DonatePage = () => {
               />
               <input
                 required
-                type="number"
+                type="text"
                 value={userInput.enteredphone}
                 onChange={phoneChangeHandler}
                 placeholder="Please enter your mobile number"
@@ -102,10 +135,12 @@ const DonatePage = () => {
               <button
                 type="submit"
                 className="w-full bg-black text-white p-2 rounded"
+                disabled={isSubmitting}
               >
-                Donate Now
+                {isSubmitting ? 'Submitting...' : 'Donate Now'}
               </button>
             </form>
+            {apiError && <p className="text-red-500 text-center mt-4">{apiError}</p>}
           </div>
           <div className="w-1/2 p-4 ml-24">
             <h2 className="text-xl font-bold mb-4">Recent Donors</h2>
@@ -117,7 +152,6 @@ const DonatePage = () => {
                 >
                   <div>
                     <p className="font-bold mb-2">{donor.name}</p>
-                    {/* <p className="text-gray-600">Donated on {donor.date}</p> */}
                   </div>
                   <div className="font-bold text-gray-800">{donor.amount}</div>
                 </div>

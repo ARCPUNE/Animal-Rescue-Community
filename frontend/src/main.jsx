@@ -9,9 +9,12 @@ import About from './components/About/About.jsx'
 import Contact from './components/Contact/Contact.jsx'
 import LoginForm from './components/Header/LoginForm.jsx'
 import RegistrationForm from './components/Header/RegistrationForm.jsx'
-import DogListing from './components/DogListing/DogListing.jsx'
-import CatListing from './components/CatListing/CatListing.jsx'
 import DonatePage from './components/DonatePage/DonatePage.jsx'
+import Post from './components/Post/Post.jsx'
+import PetAdoptionForm from './components/PetAdoptionForm.jsx'
+import DogListing from './components/ListingPages/DogListing/DogListing.jsx'
+import CatListing from './components/ListingPages/CatListing/CatListing.jsx'
+import WorkInProgress from './components/inProgress.jsx'
 
 // const router = createBrowserRouter([
 //   {
@@ -41,13 +44,17 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path = '/' element={<Layout />} >
       <Route path ='' element={<Home />} />
+      <Route path ='/home' element={<Home />} />
       <Route path ='about' element={<About />} />
       <Route path ='contact' element={<Contact />} />
       <Route path ='login' element={<LoginForm />} />
       <Route path ='register' element={<RegistrationForm />} />
-      <Route path ='adoptDogs' element={<DogListing />} />
+      <Route path ='adoptDogs' element={<DogListing/>} />
       <Route path ='adoptCats' element={<CatListing />} />
       <Route path ='donate' element={<DonatePage />} />
+      <Route path ='post' element={<Post />} />
+      <Route path ='form' element={<PetAdoptionForm />} />
+      <Route path ='inProgress' element={<WorkInProgress />} />
 
     </Route>
   )

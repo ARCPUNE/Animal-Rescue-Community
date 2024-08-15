@@ -18,7 +18,7 @@ const ImageSlider = () => {
   }, [images.length]);
 
   return (
-    <div className="relative w-full h-96 overflow-hidden py-8">
+    <div className="relative w-[100%] h-[600px] overflow-hidden rounded-xl ">
       {images.map((image, index) => (
         <img
           key={index}
@@ -31,7 +31,7 @@ const ImageSlider = () => {
       ))}
 
 
-<div className="absolute inset-0 flex items-center justify-center">
+{/* <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-2/3 md:w-1/2">
           <input
             type="text"
@@ -58,7 +58,7 @@ const ImageSlider = () => {
             </svg>
           </button>
         </div>
-      </div>
+      </div> */}
 
 
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
