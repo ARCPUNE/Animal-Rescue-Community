@@ -19,7 +19,7 @@ export default function Header() {
               <div className="relative">
                 <img
                   src="./HeaderImages/arc_logo.png"
-                  className="w-24 h-20 border-8 border-yellow-50 rounded-full"
+                  className="w-20 h-auto max-h-20 border-8 border-yellow-50 rounded-full object-contain"
                   alt="Logo"
                 />
               </div>

@@ -10,7 +10,7 @@ const DonatePage = () => {
   const [donors, setDonors] = useState([
     { name: "Sachin Mishra", amount: "₹3000", phone: 123456789 },
     { name: "Saurabh Maskade", amount: "₹6000", phone: 123456789 },
-    { name: "Sahil Kamble", amount: "Mein Nahi Dunga!", phone: 123456789 },
+    { name: "Sahil Kamble", amount: "₹10000", phone: 123456789 },
     { name: "Akash", amount: "₹5000", phone: 123456789 }
   ]);
 

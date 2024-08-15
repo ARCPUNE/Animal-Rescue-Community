@@ -117,7 +117,7 @@ export default function Contact() {
                                     />
                                 </svg>
                                 <div className="ml-4 text-md tracking-wide font-semibold w-40">
-                                    +91 1234567890
+                                    +91 7447789501
                                 </div>
                             </div>
 
@@ -139,7 +139,7 @@ export default function Contact() {
                                     />
                                 </svg>
                                 <div className="ml-4 text-md tracking-wide font-semibold w-40">
-                                    support@arc.in
+                                    reacharcpune@gmail.com
                                 </div>
                             </div>
                         </div>
