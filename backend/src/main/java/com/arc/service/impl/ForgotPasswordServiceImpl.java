@@ -25,6 +25,7 @@ import com.arc.service.ForgotPasswordService;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -83,6 +84,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 		return randomNumber;
 	}
 
+	@Transactional
 	@Override
 	public void verifyOTP(Integer otp, String email) {
 				
@@ -99,6 +101,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 		forgotPasswordRepository.save(fp);
 	}
 
+	@Transactional
 	@Override
 	public void changePassword(String email,ChangePassword changePassword) {
 		
@@ -114,7 +117,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 	    }
 		
 		userRepository.updatePassword(email, encoder.encode(changePassword.password()));
-		forgotPasswordRepository.delete(fp);
+		forgotPasswordRepository.deleteById(fp.getId());
 	}
 
 }

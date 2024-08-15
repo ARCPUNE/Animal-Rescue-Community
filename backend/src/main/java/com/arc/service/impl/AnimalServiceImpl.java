@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.AnimalDTO;
 import com.arc.entities.Animal;
+import com.arc.entities.Category;
 import com.arc.exception.AnimalNotFoundException;
 import com.arc.repository.AnimalRepository;
 import com.arc.service.AnimalService;
@@ -122,6 +123,18 @@ public class AnimalServiceImpl implements AnimalService {
 			
 			animalRepository.deleteById(id);
 		}
+	}
+
+	@Override
+	public List<AnimalDTO> getPetByType(Category pet) {
+		return animalRepository.findByCategory(pet) // Get all animal entities from DB
+				.stream() // Convert animal list to stream
+				.map(entity -> {
+					AnimalDTO animalDTO = mapper.map(entity, AnimalDTO.class);
+					String photoUrl = backendURL + "/"+path + animalDTO.getPhoto();
+					animalDTO.setPhotoURL(photoUrl);
+					return animalDTO;
+				}).toList(); // Convert Stream back to list
 	}
 
 }
