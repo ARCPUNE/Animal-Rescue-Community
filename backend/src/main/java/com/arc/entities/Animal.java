@@ -37,8 +37,11 @@ public class Animal {
     @Column(nullable = false, precision = 2)
     private double age;
 
-    @Column(nullable = false)
-    private boolean isVaccinated;
+    @Column(nullable = false,name = "vaccinated")
+    private boolean vaccinated;
+    
+    @Column(nullable = false,name = "dewormed")
+    private boolean dewormed;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

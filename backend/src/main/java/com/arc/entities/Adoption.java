@@ -42,7 +42,9 @@ public class Adoption {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
-
+    
+    @Column(name="govt_id_photo", nullable = false)
+    private String govtIdPhoto;
 
     @Column(name = "govt_id", nullable = false,length = 30)
     private String govtId;

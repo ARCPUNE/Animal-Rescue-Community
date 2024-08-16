@@ -33,7 +33,10 @@ public class AnimalDTO {
     private double age;
 
     @NotNull(message = "Vaccination status must be provided")
-    private boolean isVaccinated;
+    private boolean vaccinated;
+    
+    @NotNull(message = "Dewormed status must be provided")
+    private boolean dewormed;
 
     @NotNull(message = "Gender must be provided")
     private Gender gender;
@@ -46,7 +49,6 @@ public class AnimalDTO {
     
     private String photoURL;
 
-    @NotNull(message = "Status must be provided")
     private Status status;
 
     private String description;

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.AnimalDTO;
 import com.arc.entities.Animal;
+import com.arc.entities.Animal.Status;
 import com.arc.entities.Category;
 import com.arc.exception.AnimalNotFoundException;
 import com.arc.repository.AnimalRepository;
@@ -71,6 +72,7 @@ public class AnimalServiceImpl implements AnimalService {
 		String uploadedFileName = fileService.uploadFile(path, file);
 
 		animalDTO.setPhoto(uploadedFileName);
+		animalDTO.setStatus(Status.AVAILABLE);
 
 		Animal animal = animalRepository.save(mapper.map(animalDTO, Animal.class)); // Map animalDTO to animal and save
 																					// it

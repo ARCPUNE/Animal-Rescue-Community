@@ -1,6 +1,6 @@
 package com.arc.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,11 +22,14 @@ public class AdoptionDTO {
     @NotNull
     private UserDTO userId;
 
-    @NotNull
-    private LocalDate adoptionDate;
+    private Date adoptionDate;
 
     @NotBlank
     private String status;
+    
+    private String govtIdPhoto;
+    
+    private String govtIdPhotoURL;
 
     @NotBlank
     @Size(max = 30)

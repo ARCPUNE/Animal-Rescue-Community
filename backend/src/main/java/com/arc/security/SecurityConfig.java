@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity(debug = true)
-//@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -50,9 +51,12 @@ public class SecurityConfig {
 				.authorizeHttpRequests(requests -> requests.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 						.requestMatchers("/auth/**", "/forgot/**", "/api/login/oauth2/code/google",
 								"/oauth2/authorization/google", "/oauth2/authorization/github")
-						.permitAll().requestMatchers("/api/users").hasRole("Admin").anyRequest().authenticated())
+						.permitAll()
+						.requestMatchers("/api/users").hasRole("Admin")
+						.anyRequest().authenticated())
 				.oauth2Login(oAuth2 -> 
 					oAuth2.successHandler(oAuth2SuccessHandler))
+				.formLogin(form-> form.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider());
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
@@ -65,8 +69,10 @@ public class SecurityConfig {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(@NonNull CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins(frontendURL)
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS").allowedHeaders("*")
+				registry.addMapping("/**")
+						.allowedOrigins(frontendURL)
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+						.allowedHeaders("*")
 						.allowCredentials(true);
 			}
 		};

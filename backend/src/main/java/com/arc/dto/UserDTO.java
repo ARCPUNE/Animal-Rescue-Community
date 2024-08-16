@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +29,6 @@ public class UserDTO {
 	
 	private String phoneNo;
 	
-	@NotNull
 	private Role role;
 	
 	@NotBlank(message = "Address Cannot be Blank")
