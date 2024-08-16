@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import jsPDF from "jspdf";
 
 const PetAdoptionForm = () => {
@@ -247,7 +247,7 @@ const PetAdoptionForm = () => {
           </button>
         </div>
       </div>
-    </div>x
+    </div>
   );
 };
 

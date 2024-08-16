@@ -105,7 +105,7 @@ export default function Header() {
             </li>
             <li>
               <NavLink
-                to="/form"
+                to="/post"
                 className={({ isActive }) =>
                   `block py-2 pr-4 pl-3 lg:p-0 ${
                     isActive ? "text-orange-700" : "text-gray-700"
@@ -120,7 +120,7 @@ export default function Header() {
         </div>
 
         <div className="flex items-center space-x-4 lg:order-2">
-          {user ? (
+          {user.id ? (
             <div className="flex items-center space-x-4">
               <span className="text-gray-800 text-sm sm:text-base">Welcome, {user.name}</span>
               <Link
