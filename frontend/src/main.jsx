@@ -21,7 +21,9 @@ import CatListing from "./components/ListingPages/CatListing/CatListing.jsx";
 import WorkInProgress from "./components/inProgress.jsx";
 import ForgotPassword from "./components/Header/ForgotPass.jsx";
 import OthersListing from "./components/ListingPages/OthersListing";
-import ProtectedRoute from "./ProtectedRoute"; // Import the ProtectedRoute component
+import ProtectedRoute from "./ProtectedRoute";
+import PetListing from "./components/ListingPages/DetailsPage.jsx";
+import AdminPage from "./components/AdminPage/AdminPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,10 +40,16 @@ const router = createBrowserRouter(
       <Route path="adoptDogs" element={<ProtectedRoute element={<DogListing />} />} />
       <Route path="adoptCats" element={<ProtectedRoute element={<CatListing />} />} />
       <Route path="others" element={<ProtectedRoute element={<OthersListing />} />} />
+      <Route path="adoptDogs/:id" element={<ProtectedRoute element={<PetListing />} />} />
+      <Route path="adoptCats/:id" element={<ProtectedRoute element={<PetListing />} />} />
+      <Route path="others/:id" element={<ProtectedRoute element={<PetListing />} />} />
       <Route path="donate" element={<ProtectedRoute element={<DonatePage />} />} />
+      <Route path="adopt/:id" element={<ProtectedRoute element={<PetAdoptionForm />} />} />
+
       <Route path="post" element={<ProtectedRoute element={<Post />} />} />
       <Route path="form" element={<ProtectedRoute element={<PetAdoptionForm />} />} />
       <Route path="inProgress" element={<ProtectedRoute element={<WorkInProgress />} />} />
+      <Route path="admin" element={<ProtectedRoute element={<AdminPage />} />} />
     </Route>
   )
 );

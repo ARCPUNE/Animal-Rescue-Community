@@ -1,84 +1,119 @@
 package com.arc.service.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.AdoptionDTO;
 import com.arc.entities.Adoption;
 import com.arc.exception.AdoptionNotFoundException;
 import com.arc.repository.AdoptionRepository;
 import com.arc.service.AdoptionService;
+import com.arc.service.FileService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class AdoptionServiceImpl implements AdoptionService {
 	
-	@Autowired
-	private ModelMapper mapper;
-	
-	@Autowired
-	private AdoptionRepository adoptionRepository;
+	@Value("${project.img.adoptions}")
+	private String path;
+
+	@Value("${backend.url}")
+	private String backendURL;
+
+	private final ModelMapper mapper;
+	private final FileService fileService;
+	private final AdoptionRepository adoptionRepository;
 	
 	@Override
 	public List<AdoptionDTO> getAllAdoptions() {
 
 		return adoptionRepository.findAllAdoptionsWithAnimalAndUser() // Get all adoption entities from DB
 				.stream() // Convert adoption list to stream
-				.map(entity-> // map every adoption
-					mapper.map(entity, AdoptionDTO.class) // Convert adoption entity to adoption DTO
-					).toList(); // Convert Stream back to list
+				.map(entity-> {
+					AdoptionDTO adoptionDTO = mapper.map(entity, AdoptionDTO.class);
+					String photoUrl = backendURL + "/"+path + adoptionDTO.getGovtIdPhoto();
+					adoptionDTO.setGovtIdPhotoURL(photoUrl);
+					return adoptionDTO;
+				}).toList(); // Convert Stream back to list
 	}
 
 	@Override
 	public AdoptionDTO getAdoption(Long id) {
 
-		// Check if id is not null and adoption with specified id exists
-		if (id != null && adoptionRepository.existsById(id)) {
-			
-			// Get adoption from Repository
+		// Get adoption from Repository
 			Adoption adoption = adoptionRepository.findById(id).orElseThrow(()->new AdoptionNotFoundException("Adoption with id "+ id + " do not exist"));
 			
 			//  map adoption to AdoptionDTO and return it
-			return mapper.map(adoption, AdoptionDTO.class);			
-		}
-		throw new AdoptionNotFoundException("Adoption with id "+ id + " do not exist");
+			AdoptionDTO adoptionDTO = mapper.map(adoption, AdoptionDTO.class);
+			String photoUrl = backendURL + "/"+path + adoptionDTO.getGovtIdPhoto();
+			adoptionDTO.setGovtIdPhotoURL(photoUrl);
+			return adoptionDTO;		
 	}
 
 	@Override
-	public AdoptionDTO addNewAdoption(AdoptionDTO adoptionDTO) {
-		return mapper.map(
-			adoptionRepository.save(
-					mapper.map(adoptionDTO, Adoption.class) // Map adoptionDTO to adoption and save it in DB
-					), AdoptionDTO.class); // map the saved adoption entity to adoptionDTO and return it
+	public AdoptionDTO addNewAdoption(AdoptionDTO adoptionDTO, MultipartFile file) throws IOException {
+		String uploadedFileName = fileService.uploadFile(path, file);
+		adoptionDTO.setAdoptionDate(new Date(System.currentTimeMillis()));
+		adoptionDTO.setGovtIdPhoto(uploadedFileName);
+		
+		
+		Adoption adoption = adoptionRepository.save(mapper.map(adoptionDTO, Adoption.class));
 
+		String photoUrl = backendURL + "/"+path + adoptionDTO.getGovtIdPhoto();
+
+		adoptionDTO = mapper.map(adoption, AdoptionDTO.class);
+		adoptionDTO.setGovtIdPhotoURL(photoUrl);
+		return adoptionDTO;
 	}
 
 	@Override
-	public AdoptionDTO updateAdoption(Long id, AdoptionDTO adoptionDTO) {
-		// Check if id is not null and adoption with specified id exists
-		if (id == null || !adoptionRepository.existsById(id)) {
-			throw new AdoptionNotFoundException("Adoption with id "+ id + " do not exist");
-		}
+	public AdoptionDTO updateAdoption(Long id, AdoptionDTO adoptionDTO, MultipartFile file) throws IOException {
 		
 		// Get Adoption from Repository
 		Adoption adoption = adoptionRepository.findById(id).orElseThrow(()->new AdoptionNotFoundException("Adoption with id "+ id + " do not exist"));
 	
+String fileName = adoption.getGovtIdPhoto();
+		
+		if (file != null) {
+			Files.deleteIfExists(Paths.get(path + File.separator + fileName));
+			fileName = fileService.uploadFile(path, file);
+		}
+		
+		adoptionDTO.setGovtIdPhoto(fileName);
+		
 		// Update Adoption details
 		mapper.map(adoptionDTO,adoption);
 		
 		// save adoption in database and map the returned adoption entity to adoptionDTO 
-		return mapper.map(adoptionRepository.save(adoption), AdoptionDTO.class);
+		String photoUrl = backendURL + "/"+path + adoptionDTO.getGovtIdPhoto();
+
+		adoptionDTO = mapper.map(adoption, AdoptionDTO.class);
+		adoptionDTO.setGovtIdPhotoURL(photoUrl);
+		return adoptionDTO;
 
 	}
 
 	@Override
-	public void deleteAdoption(Long id) {
+	public void deleteAdoption(Long id) throws IOException {
 		// Check if id is not null
-		if (id != null) {
-			adoptionRepository.deleteById(id);
-		}
+				if (id != null) {
+					Adoption adoption = adoptionRepository.findById(id)
+							.orElseThrow(() -> new AdoptionNotFoundException("Expense with id " + id + " do not exist"));
+					Files.deleteIfExists(Paths.get(path + File.separator + adoption.getGovtIdPhoto()));
+					
+					adoptionRepository.deleteById(id);
+				}
 	}
 	
 }

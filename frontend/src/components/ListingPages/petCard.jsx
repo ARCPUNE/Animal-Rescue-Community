@@ -10,7 +10,7 @@ const PetCard = ({ pet }) => {
   const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
-    if (pet && pet.photoURL) {
+    if (pet && pet.photo != 'null') {
       const fetchImage = async () => {
         try {
           const response = await axios.get(pet.photoURL, {
@@ -44,7 +44,7 @@ const PetCard = ({ pet }) => {
         <img
           src={imageSrc}
           alt={pet.name}
-          className="w-full h-48 object-cover rounded-t-lg"
+          className="w-full h-48 object-cover hover:opacity-75 hover:scale-105 ease-in-out duration-300 rounded-t-lg"
         />
       )}
       <div className="p-4">
@@ -59,6 +59,7 @@ const PetCard = ({ pet }) => {
 PetCard.propTypes = {
   pet: PropTypes.shape({
     photoURL: PropTypes.string.isRequired,
+    photo: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     gender: PropTypes.string.isRequired,
     breed: PropTypes.string.isRequired,

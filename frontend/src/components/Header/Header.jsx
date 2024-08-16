@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logOut } from "../../Features/userSlice";
@@ -116,6 +116,21 @@ export default function Header() {
                 Post
               </NavLink>
             </li>
+            {user.role === 'ROLE_Admin' && (
+              <li>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    `block py-2 pr-4 pl-3 lg:p-0 ${
+                      isActive ? "text-orange-700" : "text-gray-700"
+                    } hover:text-orange-700 hover:bg-gray-50 lg:hover:bg-transparent border-b lg:border-0 border-gray-100`
+                  }
+                  onClick={toggleMobileMenu}
+                >
+                  Admin Panel
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
 

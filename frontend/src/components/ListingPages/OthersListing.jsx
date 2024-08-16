@@ -7,11 +7,20 @@ import { useSelector } from "react-redux";
 
 const OthersListing = () => {
   const [petData, setPetData] = useState([]);
+  const [temp, setTemp] = useState([]);
   const user = useSelector(selectUser);
   const [isAdmin] = useState(() => user?.role === "ROLE_Admin" || false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    request();
+  }, []);
+
+  useEffect(() => {
+    request();
+  }, [temp]);
+
+  const request = () => {
     axiosInstance
       .get("/api/animals/category/OTHER")
       .then((response) => {
@@ -20,23 +29,27 @@ const OthersListing = () => {
       .catch((error) => {
         console.error("Error fetching pet data:", error);
       });
-  }, []);
+  };
 
   // Handler function to delete a pet
   const handleDelete = (petId) => {
-    axiosInstance
-      .delete(`/api/animals/${petId}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setPetData(petData.filter((pet) => pet.id !== petId));
-          console.log(`Deleted pet with id ${petId}`);
-        } else {
-          console.error("Failed to delete pet");
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting pet:", error);
-      });
+    const isConfirmed = confirm("Are you sure you want to delete this pet?");
+
+    if (isConfirmed) {
+      axiosInstance
+        .delete(`/api/animals/${petId}`)
+        .then((response) => {
+          if (response.status === 204) {
+            setTemp(petData.filter((pet) => pet.id !== petId));
+            console.log(`Deleted pet with id ${petId}`);
+          } else {
+            console.error("Failed to delete pet");
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting pet:", error);
+        });
+    }
   };
 
   // Handler function to navigate to the adoptCats/id page

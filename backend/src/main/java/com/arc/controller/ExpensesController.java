@@ -46,7 +46,7 @@ public class ExpensesController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestPart String expenseDTO, @Nullable MultipartFile file) throws IOException {		
+	public ResponseEntity<?> updateExpense(@PathVariable Long id, @RequestPart String expenseDTO, @Nullable @RequestPart MultipartFile file) throws IOException {		
 		ExpenseDTO dto = mapper.readValue(expenseDTO, ExpenseDTO.class);
 		if(file != null && file.isEmpty()) file = null;
 		return ResponseEntity.status(HttpStatus.OK).body(expenseService.updateExpense(id, dto,file));

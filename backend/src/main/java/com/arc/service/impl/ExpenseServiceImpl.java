@@ -62,7 +62,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 		// map expense to ExpenseDTO and return it
 		ExpenseDTO animalDTO = mapper.map(expense, ExpenseDTO.class);
 
-		String photoUrl = backendURL + "/file/animals/" + animalDTO.getExpenseProof();
+		String photoUrl = backendURL + "/"+path + animalDTO.getExpenseProof();
 		animalDTO.setExpenseProofURL(photoUrl);
 
 		return animalDTO;
