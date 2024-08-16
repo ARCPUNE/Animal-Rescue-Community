@@ -1,23 +1,23 @@
 import  { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../AxiosInstance';
+import { useSelector } from 'react-redux';
 
 const DonatePage = () => {
-  const [userInput, setUserInput] = useState({
-    enteredname: '',
-    enteredAmount: '',
-    enteredphone: '',
-  });
+  const [userInput, setUserInput] = useState(0);
 
   const [donors, setDonors] = useState([]);
   const [apiError, setApiError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     // Fetch initial list of donors from the database
     const fetchDonors = async () => {
       try {
-        const response = await axios.get('https://api.example.com/donors');
-        setDonors(response.data);
+        const response = await axiosInstance
+        .get('/api/donations');
+        const donors= response.data.sort((a, b) => b.amount - a.amount);
+        setDonors(donors.slice(0, 5));
       } catch (error) {
         console.error('Error fetching donors:', error);
         setApiError('Failed to fetch donors. Please try again.');
@@ -27,54 +27,39 @@ const DonatePage = () => {
     fetchDonors();
   }, []);
 
-  const nameChangeHandler = (event) => {
-    setUserInput((prevState) => ({
-      ...prevState,
-      enteredname: event.target.value,
-    }));
-  };
-
-  const phoneChangeHandler = (event) => {
-    setUserInput((prevState) => ({
-      ...prevState,
-      enteredphone: event.target.value,
-    }));
-  };
-
   const amountChangeHandler = (event) => {
-    setUserInput((prevState) => ({
-      ...prevState,
-      enteredAmount: event.target.value,
-    }));
+    setUserInput(event.target.value);
   };
 
   const submitHandler = async (event) => {
     event.preventDefault();
-
-    const DonateData = {
-      name: userInput.enteredname,
-      amount: userInput.enteredAmount,
-      phone: userInput.enteredphone,
+  
+    // Create a new FormData object
+    const formDataToSubmit = new FormData();
+    
+    // Construct the donationDTO object
+    const donationDTO = {
+      userId: {id:user.id},
+      amount: userInput,
     };
-
+    
+    // Append the donationDTO as a string to the FormData object
+    formDataToSubmit.append("donationDTO", JSON.stringify(donationDTO));
+  
     setIsSubmitting(true);
-
+  
     try {
-      // Post new donation to the database
-      const response = await axios.post('https://api.example.com/donors', DonateData);
-
+      // Post the donation to the server
+      const response = await axiosInstance.post('/api/donations', formDataToSubmit, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
       if (response.status === 201) {
-        // Fetch updated list of donors after successful addition
-        const updatedResponse = await axios.get('https://api.example.com/donors');
-        setDonors(updatedResponse.data);
-
+        alert('Donation submitted successfully!');
         // Clear form
-        setUserInput({
-          enteredname: '',
-          enteredAmount: '',
-          enteredphone: '',
-        });
-
+        setUserInput("");
         setApiError('');
       } else {
         setApiError('Failed to submit donation. Please try again.');
@@ -86,17 +71,19 @@ const DonatePage = () => {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
-    <div>
-      <div className="text-black font-bold text-4xl text-center mb-4 mt-8">
+    <div className='bg-gray-100'>
+    <div >
+      <div className="text-black font-bold text-4xl text-center mb-4 pt-8">
         Support Our Cause{" "}
         <img src="./HomeImages/Heart.svg" className="size-14 inline-flex" alt="Heart Icon" />
       </div>
       <div className="text-gray-600 text-center mt-2 text-xl mr-12">
         Your donation can make a real difference
       </div>
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+      <div className="py-8 bg-gray-100 flex flex-col items-center justify-center p-4">
         <div className="bg-white shadow-lg rounded-lg p-6 max-w-4xl w-full flex">
           <div className="w-1/2 p-4 ml-8">
             <h2 className="text-xl font-bold mb-4">Scan to Donate</h2>
@@ -111,23 +98,23 @@ const DonatePage = () => {
               <input
                 required
                 type="text"
-                value={userInput.enteredname}
-                onChange={nameChangeHandler}
+                value={user.name}
+                disabled
                 placeholder="Please enter your name"
                 className="w-full p-2 border border-gray-300 rounded"
               />
               <input
                 required
                 type="text"
-                value={userInput.enteredphone}
-                onChange={phoneChangeHandler}
+                value={user.phoneNo}
+                disabled
                 placeholder="Please enter your mobile number"
                 className="w-full p-2 border border-gray-300 rounded"
               />
               <input
                 required
                 type="number"
-                value={userInput.enteredAmount}
+                value={userInput}
                 onChange={amountChangeHandler}
                 placeholder="Amount (in rupees)"
                 className="w-full p-2 border border-gray-300 rounded"
@@ -143,7 +130,7 @@ const DonatePage = () => {
             {apiError && <p className="text-red-500 text-center mt-4">{apiError}</p>}
           </div>
           <div className="w-1/2 p-4 ml-24">
-            <h2 className="text-xl font-bold mb-4">Recent Donors</h2>
+            <h2 className="text-xl font-bold mb-4">Our Top Donors</h2>
             <div className="bg-white p-4 rounded-lg shadow-lg">
               {donors.map((donor, index) => (
                 <div
@@ -151,7 +138,7 @@ const DonatePage = () => {
                   className="flex justify-between items-center border-b border-gray-200 py-2"
                 >
                   <div>
-                    <p className="font-bold mb-2">{donor.name}</p>
+                    <p className="font-bold mb-2">{donor.userId.name}</p>
                   </div>
                   <div className="font-bold text-gray-800">{donor.amount}</div>
                 </div>
@@ -160,6 +147,7 @@ const DonatePage = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

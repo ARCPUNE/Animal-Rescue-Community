@@ -1,33 +1,33 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-gray-200 py-10">
-      <div className="container mx-auto">
+    <footer className="bg-[#8A9ACD] text-white py-10">
+      <div className="container ">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8">
           <div className="text-center md:text-left mb-4 mx-12 md:mb-0">
             <h2 className="text-4xl font-bold mb-2 font-sans ">
               Join our family of pet lovers.
             </h2>
-            <p className="w-[90%] text-gray-400 ">
-              Nobis minus voluptatibus pariatur dignissimos libero quaerat iure
-              expedita at? Asperiores nemo possimus nesciunt dicta veniam
-              aspernatur quam mollitia.
+            <p className="w-[90%] text-gray-200 ">
+            Stay connected with the latest updates, adoption stories, and tips for pet care by signing up for our newsletters. Join our community and never miss a paw-some moment!
             </p>
+            
           </div>
           <div className="flex justify-center items-center mx-24">
             <input
               type="text"
-              className="w-96 border border-gray-500 p-2 rounded-md focus:outline-none focus:border-2 focus:border-blue-500"
+              className="w-96 border border-gray-500 p-2 rounded-md focus:outline-none focus:border-2 focus:border-[#8A9ACD]"
               placeholder="Enter your email"
             />
+            
             <button className="bg-black text-white px-4 py-2 rounded-r-md hover:bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 transition ease-in-out duration-300">
               Subscribe
             </button>
+            
           </div>
         </div>
-        <hr className="border-gray-700 my-8" />
+        <hr className="border-[#8A9ACD] my-8" />
 
         <div className="md:flex md:justify-between mt-4">
           <div className="mb-6 md:mb-0">
@@ -38,7 +38,7 @@ export default function Footer() {
               <img
                 src="./HeaderImages/arc_logo.png"
                 alt="Logo"
-                className="w-24 h-20 border-8 border-yellow-50 rounded-full"
+                className="w-24 h-20 "
               />
             </Link>
           </div>
@@ -47,7 +47,7 @@ export default function Footer() {
               <h2 className="mb-6 text-sm font-semibold text-white uppercase">
                 Resources
               </h2>
-              <ul className="text-gray-400 font-medium">
+              <ul className="text-gray-200 font-medium">
                 <li className="mb-4">
                   <Link to="/" className="hover:underline">
                     Home
@@ -64,7 +64,7 @@ export default function Footer() {
               <h2 className="mb-6 text-sm font-semibold text-white uppercase">
                 Follow us
               </h2>
-              <ul className="text-gray-400 font-medium">
+              <ul className="text-gray-200 font-medium">
                 <li className="mb-4">
                   <a
                     href="https://www.instagram.com/arc_pune/?hl=en"
@@ -76,9 +76,15 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <Link to="https://x.com/ARC_Pune" className="hover:underline">
+                <a
+                    href="https://x.com/ARC_Pune"
+                    className="hover:underline"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                  
                     Twitter
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -86,7 +92,7 @@ export default function Footer() {
               <h2 className="mb-6 text-sm font-semibold text-white uppercase">
                 Legal
               </h2>
-              <ul className="text-gray-400 font-medium">
+              <ul className="text-gray-200 font-medium">
                 <li className="mb-4">
                   <Link to="#" className="hover:underline">
                     Privacy Policy
@@ -101,9 +107,9 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <hr className="border-gray-700 my-8" />
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <span className="text-sm text-gray-400 sm:text-center">
+        <hr className="border-[#8A9ACD] my-8" />
+        <div className="w-full sm:flex sm:items-center sm:justify-between m-auto">
+          <span className="text-sm text-gray-200 sm:text-center">
             © 2023
             <a
               href="https://www.instagram.com/arc_pune/?hl=en"
@@ -114,7 +120,11 @@ export default function Footer() {
             . All Rights Reserved.
           </span>
           <div className="flex mt-4 space-x-5 sm:justify-center sm:mt-0">
-            <Link to="https://www.facebook.com/people/Animal-Rescue-Community-ARC/100066489018797/" className="text-gray-400 hover:text-gray-200">
+          <a
+              href="https://www.facebook.com/people/Animal-Rescue-Community-ARC/100066489018797/"
+              target="_blank"
+              className="hover:underline ml-1"
+            >
               <svg
                 className="w-4 h-4"
                 aria-hidden="true"
@@ -128,9 +138,8 @@ export default function Footer() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="sr-only">Facebook page</span>
-            </Link>
-            <Link to="https://x.com/ARC_Pune" className="text-gray-400 hover:text-gray-200">
+            </a>
+            <Link to="https://x.com/ARC_Pune" target="_blank" className="text-gray-200 hover:text-gray-100">
               <svg
                 className="w-4 h-4"
                 aria-hidden="true"

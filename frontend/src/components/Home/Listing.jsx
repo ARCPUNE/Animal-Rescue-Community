@@ -1,9 +1,8 @@
-import React from 'react';
 import AdoptionCard from './AdoptionCard';
 import { ArrowRight } from 'lucide-react';
-import dogImage from '../../../public/HomeImages/First.png'; // Add appropriate paths to your images
-import catImage from '../../../public/HomeImages/second.jpg';
-import otherImage from '../../../public/HomeImages/First.png';
+import dogImage from '../../../public/HomeImages/AdoptDog.jpg'; // Add appropriate paths to your images
+import catImage from '../../../public/HomeImages/AdoptCats.jpg';
+import otherImage from '../../../public/HomeImages/AdoptOthers.jpg';
 import { Link } from 'react-router-dom';
 
 function Listing() {

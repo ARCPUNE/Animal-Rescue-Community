@@ -4,7 +4,7 @@ const ImageSlider = () => {
   const images = [
     './HomeImages/First.png',
     './HomeImages/second.jpg',
-    './HomeImages/Third.png'
+    './HomeImages/Owner.jpg'
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);

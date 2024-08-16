@@ -73,6 +73,15 @@ function LoginForm() {
             })
           );
 
+          localStorage.setItem(
+            "user", 
+            JSON.stringify({email:email,
+              password:password,
+              loggedIn:true,
+              role:'Volunteer',
+            
+            }));
+
           navigate(
             `/home?token=${result.token}&refreshToken=${result.refreshToken}`
           );

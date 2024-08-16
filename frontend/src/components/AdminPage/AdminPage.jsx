@@ -2,15 +2,21 @@ import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../AxiosInstance";
 import store from "../../Store/Store";
+import { useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
   const [adoptions, setAdoptions] = useState([]);
   const [animals, setAnimals] = useState([]);
+  const [imageSrcs, setImageSrcs] = useState({});
+  const [loadingAdoptions, setLoadingAdoptions] = useState(true);
+  const [loadingAnimals, setLoadingAnimals] = useState(true);
+  const [loadingImages, setLoadingImages] = useState(true);
   const state = store.getState();
   const token = state.auth.jwtToken;
-  const [imageSrcs, setImageSrcs] = useState({});
+  const navigate = useNavigate();
 
   const fetchAdoptions = useCallback(async () => {
+    setLoadingAdoptions(true);
     try {
       const response = await axiosInstance.get("/api/adoptions");
       setAdoptions(
@@ -18,10 +24,13 @@ const AdminPage = () => {
       );
     } catch (error) {
       console.error("There was an error fetching the adoption requests!", error);
+    } finally {
+      setLoadingAdoptions(false);
     }
   }, []);
 
   const fetchAnimals = useCallback(async () => {
+    setLoadingAnimals(true);
     try {
       const uniqueAnimalIds = new Set(
         adoptions.map((adoption) => adoption.animalId.id)
@@ -34,6 +43,8 @@ const AdminPage = () => {
       setAnimals(animalData);
     } catch (error) {
       console.error("There was an error fetching animal data!", error);
+    } finally {
+      setLoadingAnimals(false);
     }
   }, [adoptions]);
 
@@ -49,6 +60,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     const fetchImage = async (animalId, photoURL) => {
+      setLoadingImages(true);
       try {
         const response = await axios.get(photoURL, {
           responseType: "blob",
@@ -63,6 +75,8 @@ const AdminPage = () => {
         }));
       } catch (error) {
         console.error("Error fetching the image:", error);
+      } finally {
+        setLoadingImages(false);
       }
     };
 
@@ -81,7 +95,6 @@ const AdminPage = () => {
       adoptionDTO.status = "APPROVED";
       animalDTO.status = "ADOPTED";
 
-      // Prepare FormData for the request
       const formData = new FormData();
       formData.append("adoptionDTO", JSON.stringify(adoptionDTO));
       formData.append("animalDTO", JSON.stringify(animalDTO));
@@ -92,7 +105,6 @@ const AdminPage = () => {
         },
       });
 
-      // Refetch adoptions
       fetchAdoptions();
     } catch (error) {
       console.error("There was an error approving the adoption!", error);
@@ -103,21 +115,18 @@ const AdminPage = () => {
     try {
       const adoptionDTO = adoptions.find((adoption) => adoption.animalId.id === animalId);
 
-      // Prepare FormData for the adoption update
       const formData = new FormData();
       formData.append("adoptionDTO", new Blob([JSON.stringify({
         id: adoptionDTO.id,
         status: "REJECTED",
       })], { type: "application/json" }));
 
-      // Send the request as multipart
       await axiosInstance.put(`/api/adoptions/${adoptionDTO.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      // Refetch adoptions
       fetchAdoptions();
     } catch (error) {
       console.error("There was an error rejecting the adoption!", error);
@@ -131,45 +140,58 @@ const AdminPage = () => {
           Adoption Requests
         </h1>
         <div className="bg-white shadow-md rounded-lg p-6">
-          {animals.map((animal) => (
-            <div
-              key={animal.id}
-              className="flex items-center justify-between p-4 mb-4 bg-gray-100 rounded-lg"
-            >
-              <div className="flex items-center space-x-4">
+          {loadingAdoptions || loadingAnimals ? (
+            <>
+              <div className="flex justify-center items-center mb-4">
                 <img
-                  src={imageSrcs[animal.id] || "default-image.jpg"}
-                  alt={animal.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  src="../../../public/Running dog.gif"
+                  alt="Loading..."
+                  className="w-15"
                 />
-                <div>
-                  <p className="text-lg font-medium">
-                    Name: {animal.name}
-                    {animal.category ? (
-                      <span>, Species: {animal.category}</span>
-                    ) : (
-                      <span>, Age: {animal.age}</span>
-                    )}
-                    , Gender: {animal.gender}
-                  </p>
+              </div>
+            </>
+          ) : (
+            animals.map((animal) => (
+              <div
+                key={animal.id}
+                className="flex items-center justify-between p-4 mb-4 bg-gray-100 rounded-lg"
+              >
+                <div className="flex items-center space-x-4 hover:cursor-pointer" onClick={()=>{navigate(`/adoptDogs/${animal.id}`)}} >
+                  <img
+                    src={imageSrcs[animal.id] || "default-image.jpg"}
+                    alt={animal.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="text-lg font-medium">
+                      Name: {animal.name}
+                      {animal.category ? (
+                        <span>, Species: {animal.category}</span>
+                      ) : (
+                        <span>, Age: {animal.age}</span>
+                      )}
+                      , Gender: {animal.gender}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+                    onClick={() => handleApprove(animal.id)}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                    onClick={() => handleReject(animal.id)}
+                  >
+                    Reject
+                  </button>
                 </div>
               </div>
-              <div className="flex space-x-2">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-                  onClick={() => handleApprove(animal.id)}
-                >
-                  Approve
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
-                  onClick={() => handleReject(animal.id)}
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
+          {loadingImages && <p>Loading images...</p>}
         </div>
       </div>
     </div>

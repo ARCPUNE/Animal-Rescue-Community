@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useInView } from "react-intersection-observer";
 
 
@@ -29,7 +29,7 @@ export default function About() {
               Message from the Founder
             </h2>
             <p className="mt-6 text-gray-600">
-            <b>"Grow Through What You Go Through. </b> Founded in 2020, ARC
+            <b>&quot;Grow Through What You Go Through. </b> Founded in 2020, ARC
               was established to provide emergency aid to animals in distress.
               Over the years, our rescue and rehabilitation efforts have reached
               thousands of animals across, improved public health and safety,
@@ -45,7 +45,7 @@ export default function About() {
               for the dedicated volunteer working tirelessly towards our cause.
               </p>
               <p className="mt-6 text-gray-600">
-              Our commitment to change has always been intentional. Whether it's
+              Our commitment to change has always been intentional. Whether it&apos;s
               responding to the needs of the environment or recognizing the
               importance of policy reform, our efforts are guided by mindful
               deliberation. We work on the frontlines and at the grassroots
@@ -68,7 +68,7 @@ export default function About() {
               helping animals, people, and the environment. It has been a long
               and enriching journey, and one we continue with unwavering
               commitment—there is no stopping or turning back. With joy, love,
-              and determination."
+              and determination.&quot;
               <p className="mt-4 text-gray-600">
                 <b>Sahil Kamble</b>
                 <br></br>
@@ -148,7 +148,7 @@ export default function About() {
             <p className="mt-2 text-gray-600">
               We conduct regular vaccination & sterilisation drives for strays.
               By vaccinating animals, we aim to prevent the spread of illnesses
-              and maintain the overall health of Pune's stray population.
+              and maintain the overall health of Pune&apos;s stray population.
             </p>
 
             {/* <h2 className="text-2xl text-gray-900 font-bold md:text-4xl">
@@ -191,7 +191,7 @@ export default function About() {
               image2InView ? "transform-none" : "transform translate-y-20 opacity-0"
             }`}
           >
-            <img src="../../../public/AboutImages/turtle.png" />
+            <img src="../../../public/AboutImages/HuggingCats.jpg" />
           </div>
         </div>
       </div>
