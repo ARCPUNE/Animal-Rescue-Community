@@ -24,7 +24,7 @@ const userSlice = createSlice({
         name: null,
         email: null,
         password: null,
-        phone_no: null,
+        phoneNo: null,
         role: null,
         address: null,
       };

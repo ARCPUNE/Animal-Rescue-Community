@@ -2,9 +2,12 @@ package com.arc.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arc.dto.DonationDTO;
 import com.arc.entities.Donation;
+import com.arc.entities.Donation.PaymentMethod;
+import com.arc.entities.User;
 import com.arc.exception.DonationNotFoundException;
 import com.arc.repository.DonationRepository;
 import com.arc.service.DonationService;
@@ -68,17 +73,27 @@ public class DonationServiceImpl implements DonationService {
 
 	@Override
 	public DonationDTO addNewDonation(DonationDTO donationDTO, MultipartFile file) throws IOException {
-		String uploadedFileName = fileService.uploadFile(path, file);
+		String uploadedFileName = null;
+	    if (file != null) {
+	        uploadedFileName = fileService.uploadFile(path, file);
+	    }
+	    
+	    // Set default values
+	    donationDTO.setPaymentMethod(PaymentMethod.UPI);
+	    donationDTO.setDate(new Date(System.currentTimeMillis()));
+	    donationDTO.setDonationProof(uploadedFileName);
+	    
+	    // Save the updated donation
+	    Donation donation = donationRepository.save(mapper.map(donationDTO, Donation.class));
 
-		donationDTO.setDonationProof(uploadedFileName);
-		Donation donation = donationRepository.save(mapper.map(donationDTO, Donation.class));
+	    String photoUrl = null;
+	    if (file != null) {
+	        photoUrl = backendURL + "/" + path + donationDTO.getDonationProof();
+	    }
 
-		String photoUrl = backendURL + "/"+path + donationDTO.getDonationProof();
-
-		donationDTO = mapper.map(donation, DonationDTO.class);
-		donationDTO.setDonationProofURL(photoUrl);
-		return donationDTO;
-
+	    donationDTO = mapper.map(donation, DonationDTO.class);
+	    donationDTO.setDonationProofURL(photoUrl);
+	    return donationDTO;
 	}
 
 	@Override

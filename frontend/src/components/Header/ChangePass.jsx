@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axiosInstance from '../../AxiosInstance';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = ({ email }) => {
   const [newPassword, setNewPassword] = useState('');
@@ -10,18 +11,19 @@ const ChangePassword = ({ email }) => {
   const [messageType, setMessageType] = useState(''); // New state for message type
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleChangePassword = async (e) => {
     e.preventDefault();
     const validationErrors = {};
 
+    const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     if (!newPassword) {
-      validationErrors.newPassword = 'New password is required';
-    } else if (newPassword.length < 6) {
-      validationErrors.newPassword = 'Password must be at least 6 characters long';
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      validationErrors.confirmNewPassword = 'Passwords do not match';
+      validationErrors.newPassword = "Password is required.";
+    }else if(!newPassword.match(passPattern)){
+      validationErrors.newPassword = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+    } else if (newPassword !== confirmNewPassword) {
+      validationErrors.newPassword = "Passwords do not match.";
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -35,10 +37,15 @@ const ChangePassword = ({ email }) => {
           rePassword: confirmNewPassword,
         });
         setMessage(response.data.message);
-        setMessageType('success'); // Set message type to success
+        setMessageType('success'); 
+        setNewPassword('');
+        setConfirmNewPassword('');
+        setErrors({});
+        setLoading(false);
+        navigate('/login');
       } catch (error) {
         setMessage('Failed to change password. Please try again later.');
-        setMessageType('error'); // Set message type to error
+        setMessageType('error'); 
       } finally {
         setLoading(false);
       }

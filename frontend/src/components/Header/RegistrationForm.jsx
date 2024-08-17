@@ -40,11 +40,14 @@ function RegistrationForm() {
       formErrors.mobile = "Mobile number should be exactly 10 digits.";
     }
 
+    const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     if (!password) {
       formErrors.password = "Password is required.";
+    }else if(!password.match(passPattern)){
+      formErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
     } else if (password !== confirmPassword) {
       formErrors.password = "Passwords do not match.";
-    }
+    } 
 
     if (address.trim().length === 0) {
       formErrors.address = "Address is required.";

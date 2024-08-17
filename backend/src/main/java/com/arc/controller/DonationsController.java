@@ -40,7 +40,7 @@ public class DonationsController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> addNewDonation(@RequestPart String donationDTO, @RequestPart MultipartFile file) throws IOException {
+	public ResponseEntity<?> addNewDonation(@RequestPart String donationDTO,@Nullable @RequestPart MultipartFile file) throws IOException {
 		DonationDTO dto = mapper.readValue(donationDTO, DonationDTO.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(donationService.addNewDonation(dto,file));
 	}
