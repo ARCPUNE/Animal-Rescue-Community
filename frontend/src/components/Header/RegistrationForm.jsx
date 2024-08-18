@@ -17,6 +17,18 @@ function RegistrationForm() {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+
+  const signInWithGoogle = () => {
+    setErrors({}); // Clear any existing errors
+    window.location.href = `${backendUrl}/oauth2/authorization/google`;
+  };
+
+  const signInWithGithub = () => {
+    setErrors({}); // Clear any existing errors
+    window.location.href = `${backendUrl}/oauth2/authorization/github`;
+  };
 
   const validate = () => {
     let formErrors = {};
@@ -140,7 +152,7 @@ function RegistrationForm() {
 
 
       <div className="flex justify-between mb-6">
-        <button className="flex items-center justify-center px-4 py-2 bg-blue-400 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mr-2">
+        <button className="flex items-center justify-center px-4 py-2 bg-blue-400 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mr-2" onClick={signInWithGoogle}>
           <img
             src="../../../public/LoginImages/google-brands-solid.svg"
             alt="Google"
@@ -149,7 +161,7 @@ function RegistrationForm() {
           Sign in with Google
         </button>
 
-        <button className="flex items-center justify-center px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ml-2">
+        <button className="flex items-center justify-center px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ml-2" onClick={signInWithGithub}>
           <img
             src="../../../public/LoginImages/github-brands-solid.svg"
             alt="GitHub"

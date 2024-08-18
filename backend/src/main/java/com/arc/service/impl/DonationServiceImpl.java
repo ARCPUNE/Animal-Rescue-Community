@@ -2,12 +2,10 @@ package com.arc.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arc.dto.DonationDTO;
 import com.arc.entities.Donation;
 import com.arc.entities.Donation.PaymentMethod;
-import com.arc.entities.User;
 import com.arc.exception.DonationNotFoundException;
 import com.arc.repository.DonationRepository;
 import com.arc.service.DonationService;
